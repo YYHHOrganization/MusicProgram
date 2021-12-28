@@ -37,7 +37,7 @@ public class ConnectDataBaseAndExecute {
             }
         } catch (Exception throwables) {
             throwables.printStackTrace();
-            System.out.println("byebyeworld!");
+            System.out.println("byebyeworld!byebye!");
             return false;
         }
     }
