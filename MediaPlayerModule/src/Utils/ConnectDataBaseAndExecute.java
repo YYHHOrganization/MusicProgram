@@ -7,7 +7,7 @@ import java.sql.*;
  * @VERSION v1.0
  * @DATE 2021.12.21
  * @author Zhang Haohan,Zhang Yingying
- * 这是修改的
+ * 这是修改的代码，数据库功能1
  */
 public class ConnectDataBaseAndExecute {
     String driver="oracle.jdbc.driver.OracleDriver";
