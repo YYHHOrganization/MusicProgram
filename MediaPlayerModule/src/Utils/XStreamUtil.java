@@ -13,6 +13,7 @@ import java.io.StringWriter;
  * @DATE 2021.12.21
  * @author Zhang Haohan,Zhang Yingying
  * 这个类作为工具类用于将任何Object转为XML格式,或者是将任何XML格式的字符串转换为类的对象
+ * 这个类工具类，很重要
  */
 public class XStreamUtil{
     /**
