@@ -1,9 +1,6 @@
 package Utils;
 
-import XmlClassType.ClickOneUserOrSongOrSinger;
-import XmlClassType.LoginQuest;
-import XmlClassType.QuestAddGroup;
-import XmlClassType.RegistRequest;
+import XmlClassType.*;
 
 /**
  * SqlMake 这个类专门用来将类型转换为对应的SQL查询语句
@@ -131,6 +128,38 @@ public class SqlMake {
                 if(databaseconn12.connectDatabase()){
                     databaseconn12.executeSqlQuery("SHOW_MY_SONGLISTS",sqlMake);
                     databaseconn12.closeDatabase();
+                }
+                break;
+
+                /*
+                服务器端的业务逻辑,应该定时更新推荐的歌单(按照收藏量),推荐的top10(按照播放量+评论量),推荐专辑(热门歌手,按照其歌曲累计播放量和评论量),在服务器端制作
+                推荐歌单和top10等,这里直接用index指向服务器的这些视图,index设置为99999.
+                 */
+            case "SHOW_GOOD_SONGLISTS": //视图里存放比较好的歌单id和歌单名
+                SingleQuest singleQuest2=(SingleQuest)XStreamUtil.converXmlStrToObject(SingleQuest.class,xml);
+                sqlMake="SELECT * FROM view_top_songlists WHERE ROWNUM<=10 ORDER BY ROWNUM ASC";
+                ConnectDataBaseAndExecute databaseconn14=new ConnectDataBaseAndExecute();
+                if(databaseconn14.connectDatabase()){
+                    databaseconn14.executeSqlQuery("SHOW_GOOD_SONGLISTS",sqlMake);
+                    databaseconn14.closeDatabase();
+                }
+                break;
+            case "SHOW_TOP_10"://视图里存放比较好的歌曲id和歌曲名
+                SingleQuest singleQuest=(SingleQuest)XStreamUtil.converXmlStrToObject(SingleQuest.class,xml);
+                sqlMake="SELECT * FROM view_top_songs WHERE ROWNUM<=10 ORDER BY ROWNUM ASC";
+                ConnectDataBaseAndExecute databaseconn13=new ConnectDataBaseAndExecute();
+                if(databaseconn13.connectDatabase()){
+                    databaseconn13.executeSqlQuery("SHOW_TOP_10",sqlMake);
+                    databaseconn13.closeDatabase();
+                }
+                break;
+            case "SHOW_GOOD_ALBUM": //视图里存放比较好的专辑id和专辑名
+                SingleQuest singleQuest3=(SingleQuest)XStreamUtil.converXmlStrToObject(SingleQuest.class,xml);
+                sqlMake="SELECT * FROM view_top_albums WHERE ROWNUM<=10 ORDER BY ROWNUM ASC";
+                ConnectDataBaseAndExecute databaseconn15=new ConnectDataBaseAndExecute();
+                if(databaseconn15.connectDatabase()){
+                    databaseconn15.executeSqlQuery("SHOW_GOOD_ALBUM",sqlMake);
+                    databaseconn15.closeDatabase();
                 }
                 break;
        }

@@ -68,6 +68,9 @@ public class ConnectDataBaseAndExecute {
                     case "LOGIN_A_USER":
                     case "SHOW_MY_SONGLISTS":
                     case "SHOW_MY_INFO":
+                    case "SHOW_GOOD_SONGLISTS":
+                    case "SHOW_TOP_10":
+                    case "SHOW_GOOD_ALBUM":
                         //System.out.println("databaseclickasong");
                         statement1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         ResultSet rs=statement1.executeQuery(sqlQuery);

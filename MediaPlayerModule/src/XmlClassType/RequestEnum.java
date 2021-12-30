@@ -17,6 +17,10 @@ public enum RequestEnum {
     CREATE_A_SONGLIST, // 创建一个歌单
     SHOW_MY_SONGLISTS, //查看我的所有歌单
     SHOW_MY_INFO, //个人用户的信息(登录后自动加载)
+    SHOW_GOOD_SONGLISTS,//显示精选歌单
+    SHOW_TOP_10, //显示前10首歌曲
+    SHOW_GOOD_ALBUM, //显示精选专辑
+
     CLICK_RANKING_LIST, //点击排行榜
     CLICK_SINGER_LIST, //点击歌手栏目,获取所有歌手
     CREATE_A_ALBUM, //创建一个专辑

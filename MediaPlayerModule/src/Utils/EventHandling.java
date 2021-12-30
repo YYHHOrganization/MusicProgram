@@ -78,7 +78,6 @@ public class EventHandling {
     public static void giveOutRequest(String requestEnum, MusicPanel musicPanel){
         String xmlStreamnew;
         switch(requestEnum){
-
             case "CREATE_A_SONGLIST":
                 String[] collectinfo3=musicPanel.getCollectInfo();
                 QuestAddGroup addSonglist=new QuestAddGroup("CREATE_A_SONGLIST", collectinfo3[0],collectinfo3[1]);
@@ -87,6 +86,27 @@ public class EventHandling {
                 break;
             case "SEARCH":
 
+                break;
+        }
+    }
+
+    /**
+     * 用于发送单个基本请求,比如查询top10,搜索内容等
+     * @param requestEnum 请求类型
+     */
+    public static void giveOutSingleRequest(String requestEnum){
+        /*
+        todo:后续不知道是否还需要加入与页码相关的内容,暂时不考虑
+         */
+        String xmlStreamnew;
+        SingleQuest singleQuest;
+        switch (requestEnum){
+            case "SHOW_GOOD_SONGLISTS":
+            case "SHOW_TOP_10":
+            case "SHOW_GOOD_ALBUM":
+                singleQuest=new SingleQuest(requestEnum);
+                xmlStreamnew=XStreamUtil.objectToXml(singleQuest);
+                ClientSocketUtils.sendToServerXml(xmlStreamnew);
                 break;
         }
     }

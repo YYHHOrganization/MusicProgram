@@ -66,6 +66,7 @@ public class DecideClassToMakeXml {
                 break;
             case "CLICK_A_SONGLIST": //done:完成,SQL语句还不是很完善,点击歌单,显示歌曲名,歌手名,专辑名和歌曲时长
             case "CLICK_AN_ALBUM": //todo: 可能后续点开专辑和点开普通歌单的UI显示要不一样,但是暂时这样设置成一样,需求就够了
+            case "SHOW_TOP_10":
                 //SelectSongsInSonglist selectSongsInSonglist=new SelectSongsInSonglist();
                 String[] res2=new String[6];
                 List<SongsWithNames> songsWithNames =new ArrayList<SongsWithNames>();
@@ -145,6 +146,8 @@ public class DecideClassToMakeXml {
                 break;
             //case "CREATE_A_SONGLIST":
             case "SHOW_MY_SONGLISTS":
+            case "SHOW_GOOD_SONGLISTS":
+            case "SHOW_GOOD_ALBUM":
                 String kind2="SHOW_MY_SONGLISTS";
                 String[] res4=new String[8];
                 List<ReplySonglistInfo> songlists =new ArrayList<ReplySonglistInfo>();
@@ -171,6 +174,7 @@ public class DecideClassToMakeXml {
                         if(songlists!=null){
                             ReplySonglists replySonglists=new ReplySonglists(type,songlists);
                             String objectXml=XStreamUtil.objectToXml(replySonglists);
+                            System.out.println(objectXml);
                             ServerSocketUtils.Task.sendToClientXml(objectXml);
                         }
                     }
@@ -180,6 +184,7 @@ public class DecideClassToMakeXml {
                     e.printStackTrace();
                 }
                 break;
+
         }
     }
 }

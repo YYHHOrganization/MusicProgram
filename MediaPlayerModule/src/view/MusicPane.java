@@ -219,6 +219,11 @@ public class MusicPane {
 		labelTOP10ImageView.setLayoutY(80);
 		labelTOP10ImageView.setOnMouseClicked(e -> {
 			labList.setText("TOP10");
+			//System.out.println("now click top 10");
+			/*
+			todo:在这里写查询top10的逻辑
+			 */
+			EventHandling.giveOutSingleRequest("SHOW_TOP_10");
 		});
 
 		// 4.推荐歌单
@@ -230,6 +235,10 @@ public class MusicPane {
 		labelRecommendSongList.setLayoutY(80);
 		labelRecommendSongList.setOnMouseClicked(e -> {
 			labList.setText("推荐歌单");
+			/*
+			todo:在这里写显示推荐歌单的逻辑
+			 */
+			EventHandling.giveOutSingleRequest("SHOW_GOOD_SONGLISTS");
 		});
 
 		// 5.推荐专辑
@@ -241,6 +250,10 @@ public class MusicPane {
 		labelRecommendAlbum.setLayoutY(80);
 		labelRecommendAlbum.setOnMouseClicked(e -> {
 			labList.setText("专辑精选");
+			/*
+			todo:在这里写显示推荐专辑的逻辑
+			 */
+			EventHandling.giveOutSingleRequest("SHOW_GOOD_ALBUM");
 		});
 
 		// 音乐馆上侧面板AnchorPane1
