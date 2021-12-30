@@ -380,35 +380,35 @@ public class ShowUserInfo {
         lab1.setPrefWidth(250);
         lab1.setPrefHeight(10);
         lab1.setLayoutX(20);
-        lab1.setLayoutY(0);
+        lab1.setLayoutY(100);
 
         Label lab2 = new Label("评论量:"+asong.getComment_cnt());
         lab2.setTextFill(Color.WHITE);
         lab2.setPrefWidth(250);
         lab2.setPrefHeight(10);
         lab2.setLayoutX(20);
-        lab2.setLayoutY(20);
+        lab2.setLayoutY(200);
 
         Label lab3 = new Label("歌词地址:"+asong.getSongtxt_addr());
         lab3.setTextFill(Color.WHITE);
         lab3.setPrefWidth(250);
         lab3.setPrefHeight(10);
         lab3.setLayoutX(20);
-        lab3.setLayoutY(40);
+        lab3.setLayoutY(300);
 
         Label lab4 = new Label("歌曲地址:"+asong.getSongmus_addr());
         lab4.setTextFill(Color.WHITE);
         lab4.setPrefWidth(250);
         lab4.setPrefHeight(10);
         lab4.setLayoutX(20);
-        lab4.setLayoutY(60);
+        lab4.setLayoutY(400);
 
         Label lab5 = new Label("歌曲id:"+asong.getSong_id());
         lab5.setTextFill(Color.WHITE);
         lab5.setPrefWidth(250);
         lab5.setPrefHeight(10);
         lab5.setLayoutX(20);
-        lab5.setLayoutY(80);
+        lab5.setLayoutY(500);
 
 
 
