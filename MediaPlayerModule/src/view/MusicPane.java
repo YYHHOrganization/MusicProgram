@@ -576,7 +576,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 30);
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);
