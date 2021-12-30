@@ -1,6 +1,7 @@
 package view;
 
 import TestThings.MainAppTest1ForClickOne;
+import Utils.EventHandling;
 import Utils.XStreamUtil;
 import XmlClassType.*;
 import cn.itheima.media.PlayBean;
@@ -174,7 +175,7 @@ public class MusicPane {
 		user = getUserPane();
 		musicHallPane = getMusicHallPane();
 		userAlist = new BorderPane();
-		userAlist.setTop(user);
+		userAlist.setTop(musicHallPane);
 		userAlist.setCenter(list);
 
 	}
@@ -560,7 +561,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 30);
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);
@@ -715,7 +716,7 @@ public class MusicPane {
 		});
 
 		//6.歌单列表标签
-		labList = new Label("我的歌单");
+		labList = new Label("推荐歌单");
 		labList.setEffect(bloom);
 		labList.setFont(new Font("黑体", 18));
 		labList.setPrefWidth(90);
@@ -1799,6 +1800,12 @@ public class MusicPane {
 						ReplySonglists replySonglists = (ReplySonglists) XStreamUtil.converXmlStrToObject(ReplySonglists.class, xml);
 						generateSongLists(replySonglists);
 						break;
+					case "SHOW_MY_INFO":
+						UserInfo userinfo2 = (UserInfo) XStreamUtil.converXmlStrToObject(UserInfo.class, xml);
+						login.labUserID.setText(userinfo2.getUser_name());
+						//本地进行存储
+						MusicPlayerMainApp.myuserinfo=userinfo2;
+						break;
 
 				}
 			}
@@ -1959,7 +1966,11 @@ public class MusicPane {
 							}
 							_alert.initOwner(staticStage);
 							_alert.show();
-							MainAppTest1ForClickOne.userId=user1.getRequestId();// 为用户的Id进行赋值处理
+							//首先,先按照这个id来搜索所有的信息,然后把这个类返回给mainapp
+							//MusicLabel musicLabelTemp=new MusicLabel("","",Integer.parseInt(login.userinfo));//把User的id传过去
+							String[] msg=new String[1];
+							msg[0]=login.userinfo;
+							EventHandling.giveOutMsg("SHOW_MY_INFO",msg);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

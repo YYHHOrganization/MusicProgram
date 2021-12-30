@@ -46,6 +46,24 @@ public class DecideClassToMakeXml {
                     e.printStackTrace();
                 }
                 break;
+            case "SHOW_MY_INFO":
+                UserInfo userInfomy=new UserInfo();
+                String[] resmy=new String[10];
+                try{
+                    while(resultSet.next()){
+                        resmy[0]="SHOW_MY_INFO";
+                        for(int i=1;i<=9;i++){
+                            resmy[i]=resultSet.getString(i);
+                        }
+                        userInfomy.setAll(resmy);
+                        String objectXml=XStreamUtil.objectToXml(userInfomy);
+                        ServerSocketUtils.Task.sendToClientXml(objectXml);
+                        //System.out.println(objectXml);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             case "CLICK_A_SONGLIST": //done:完成,SQL语句还不是很完善,点击歌单,显示歌曲名,歌手名,专辑名和歌曲时长
             case "CLICK_AN_ALBUM": //todo: 可能后续点开专辑和点开普通歌单的UI显示要不一样,但是暂时这样设置成一样,需求就够了
                 //SelectSongsInSonglist selectSongsInSonglist=new SelectSongsInSonglist();

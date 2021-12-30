@@ -3,6 +3,7 @@ package view;
 import java.io.File;
 import java.util.List;
 
+import XmlClassType.UserInfo;
 import cn.itheima.media.AddGroup;
 import cn.itheima.utils.XMLUtils;
 import javafx.application.Application;
@@ -43,6 +44,7 @@ public class MusicPlayerMainApp extends Application {
 
 	private MainPane mainPane;
 	private TopPane topPane;
+	public static UserInfo myuserinfo;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

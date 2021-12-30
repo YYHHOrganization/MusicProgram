@@ -66,6 +66,13 @@ public class EventHandling {
                 String xmlStream2=XStreamUtil.objectToXml(loginQuest);
                 ClientSocketUtils.sendToServerXml(xmlStream2);
                 break;
+            case "SHOW_MY_INFO":
+                String[] collectinfo3=msg;
+                ClickOneUserOrSongOrSinger userinfo=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_INFO,Integer.parseInt(msg[0]));
+                String xmlStream3= XStreamUtil.objectToXml(userinfo);
+                ClientSocketUtils.sendToServerXml(xmlStream3);
+                break;
+
         }
     }
     public static void giveOutRequest(String requestEnum, MusicPanel musicPanel){
