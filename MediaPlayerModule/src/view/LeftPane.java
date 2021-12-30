@@ -72,7 +72,7 @@ public class LeftPane extends ScrollPane {
 		userInfoHBox.getChildren().addAll(labUserImage, labUserID);
 
 		// 4.登录按钮：Label
-		labLogin = new Label("登录|注册");
+		labLogin = new Label("登录");
 		labLogin.setPrefWidth(190);
 		labLogin.setPrefHeight(50);
 		labLogin.setTextFill(Color.LIGHTGRAY);
@@ -86,7 +86,7 @@ public class LeftPane extends ScrollPane {
 		});
 
 		// 5.退出按钮：Label
-		labQuit = new Label("退出|切换账号");
+		labQuit = new Label("注册");
 		labQuit.setPrefWidth(190);
 		labQuit.setPrefHeight(50);
 		labQuit.setTextFill(Color.LIGHTGRAY);

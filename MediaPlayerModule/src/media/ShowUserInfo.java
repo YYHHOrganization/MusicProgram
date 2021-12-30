@@ -202,7 +202,12 @@ public class ShowUserInfo {
         MusicLabel musicLabel=null;
         switch (requestKind){
             case "REGIST_A_USER":
+                System.out.println("your id is "+user1.getRequestId());
                 musicLabel=new MusicLabel("您的ID为"+user1.getRequestId(),"USER",user1.getRequestId());
+                musicLabel.getLabel().setPrefWidth(100);
+                musicLabel.getLabel().setPrefHeight(30);
+                musicLabel.getLabel().setLayoutX(20);
+                musicLabel.getLabel().setLayoutY(30);
                 musicLabel.init();
                 MainAppTest1ForClickOne.userId=user1.getRequestId();// 为用户的Id进行赋值处理
                 break;
@@ -219,7 +224,7 @@ public class ShowUserInfo {
             case "CREATE_A_SONGLIST":
                 musicLabel=new MusicLabel("这个歌单号为:"+user1.getRequestId(),"SONGLIST",user1.getRequestId());
                 musicLabel.init();
-                //todo:在用户歌单的标签当中去添加一个相关的歌单,其中显示如下信息
+                //todo:在用户歌单的标签当中去添加一个相关的歌单,其中显示如下信息,当然这个类名现在更改了,也需要处理
                 MainAppTest1ForClickOne.songlistlabels.add(musicLabel);
                 break;
         }

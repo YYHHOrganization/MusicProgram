@@ -51,6 +51,11 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import media.MusicInMusicListLabel;
 import media.MusicLabel;
+import media.login;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -1912,19 +1917,56 @@ public class MusicPane {
 
 		switch (requestKind){
 			case "REGIST_A_USER":
-				musicLabel=new MusicLabel("您的ID为"+user1.getRequestId(),"USER",user1.getRequestId());
-				musicLabel.init();
-				MainAppTest1ForClickOne.userId=user1.getRequestId();// 为用户的Id进行赋值处理
+				System.out.println("your id is "+user1.getRequestId());
+//				musicLabel=new MusicLabel("您的ID为"+user1.getRequestId(),"USER",user1.getRequestId());
+//				//musicLabel.init();
+//				musicLabel.getLabel().setPrefWidth(100);
+//				musicLabel.getLabel().setPrefHeight(30);
+//				musicLabel.getLabel().setLayoutX(20);
+//				musicLabel.getLabel().setLayoutY(50);
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try{
+							Alert _alert = new Alert(Alert.AlertType.INFORMATION);
+							_alert.setTitle("确认您的ID");
+							_alert.setHeaderText("服务器返回信息:您的ID");
+							_alert.setContentText("您的ID为"+user1.getRequestId());
+							_alert.initOwner(staticStage);
+							_alert.show();
+							MainAppTest1ForClickOne.userId=user1.getRequestId();// 为用户的Id进行赋值处理
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 				break;
 			case "LOGIN_A_USER":
-				if(user1.getRequestId()==0){
-					musicLabel=new MusicLabel("您的登录状态为:失败,用户id或密码错误","NO_HCI",-10);
-					MainAppTest1ForClickOne.userId=-100;// 登录失败的时候重新将userID设置为原来的.
-				} else {
-					musicLabel=new MusicLabel("您的登录状态为:成功,欢迎听歌","NO_HCI",-10);
-					//MainAppTest1ForClickOne.userId=user1.getRequestId();
-				}
-				musicLabel.init();
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try{
+							Alert _alert = new Alert(Alert.AlertType.INFORMATION);
+							_alert.setTitle("您的登陆状态");
+							_alert.setHeaderText("您的登录状态为:");
+							if(user1.getRequestId()==0){
+								_alert.setContentText("失败,用户id或密码错误");
+								MainAppTest1ForClickOne.userId=-100;// 登录失败的时候重新将userID设置为原来的.
+							} else {
+								_alert.setContentText("成功,欢迎使用Java音乐播放器");
+								login.labUserID.setText(String.valueOf(login.userinfo));
+								//MainAppTest1ForClickOne.userId=user1.getRequestId();
+							}
+							_alert.initOwner(staticStage);
+							_alert.show();
+							MainAppTest1ForClickOne.userId=user1.getRequestId();// 为用户的Id进行赋值处理
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+				//musicLabel.init();
 				break;
 			case "CREATE_A_SONGLIST":
 				musicLabel=new MusicLabel("这个歌单号为:"+user1.getRequestId(),"SONGLIST",user1.getRequestId());
@@ -1934,25 +1976,25 @@ public class MusicPane {
 				break;
 		}
 		System.out.println("进入generateSingleInfo函数");
-		Group group = new Group();
-		group.getChildren().addAll(musicLabel.getLabel());
-		Scene scene = new Scene(group, 1000, 1000);
-		scene.setFill(Color.rgb(45, 47, 51));
-		scene.setOnMousePressed(e -> {
-			//记录原位置
-			mouseX = e.getSceneX();
-			mouseY = e.getSceneY();
-
-		});
-		scene.setOnMouseDragged(e -> {
-			//设置新位置
-			stage.setX(e.getScreenX() - mouseX);
-			stage.setY(e.getScreenY() - mouseY);
-		});
-		//设置场景
-		stage.setScene(scene);
-		//显示舞台
-		stage.show();
+//		Group group = new Group();
+//		group.getChildren().addAll(musicLabel.getLabel());
+//		Scene scene = new Scene(group, 1000, 1000);
+//		scene.setFill(Color.rgb(45, 47, 51));
+//		scene.setOnMousePressed(e -> {
+//			//记录原位置
+//			mouseX = e.getSceneX();
+//			mouseY = e.getSceneY();
+//
+//		});
+//		scene.setOnMouseDragged(e -> {
+//			//设置新位置
+//			stage.setX(e.getScreenX() - mouseX);
+//			stage.setY(e.getScreenY() - mouseY);
+//		});
+//		//设置场景
+//		stage.setScene(scene);
+//		//显示舞台
+//		stage.show();
 
 	}
 	public static void generateSongInfo(Songs asong){

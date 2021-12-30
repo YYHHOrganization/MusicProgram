@@ -51,23 +51,27 @@ public class EventHandling {
                 break;
         }
     }
-
-    public static void giveOutRequest(String requestEnum, MusicPanel musicPanel){
-        String xmlStreamnew;
-        switch(requestEnum){
+    public static void giveOutMsg(String requestEnum,String[] msg){
+        switch (requestEnum){
             case "REGIST":
-                String[] collectinfo=musicPanel.getCollectInfo();
+                String[] collectinfo=msg;
                 RegistRequest registRequest=new RegistRequest(RequestEnum.REGIST_A_USER,-1,collectinfo[0],collectinfo[1],collectinfo[2],collectinfo[3]);
                 String xmlStream=XStreamUtil.objectToXml(registRequest);
                 ClientSocketUtils.sendToServerXml(xmlStream);
                 //System.out.println(xmlStream);
                 break;
             case "LOGIN":
-                String[] collectinfo2=musicPanel.getCollectInfo();
+                String[] collectinfo2=msg;
                 LoginQuest loginQuest=new LoginQuest("LOGIN_A_USER",collectinfo2[0],collectinfo2[1]);
                 String xmlStream2=XStreamUtil.objectToXml(loginQuest);
                 ClientSocketUtils.sendToServerXml(xmlStream2);
                 break;
+        }
+    }
+    public static void giveOutRequest(String requestEnum, MusicPanel musicPanel){
+        String xmlStreamnew;
+        switch(requestEnum){
+
             case "CREATE_A_SONGLIST":
                 String[] collectinfo3=musicPanel.getCollectInfo();
                 QuestAddGroup addSonglist=new QuestAddGroup("CREATE_A_SONGLIST", collectinfo3[0],collectinfo3[1]);

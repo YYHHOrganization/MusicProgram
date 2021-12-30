@@ -17,8 +17,8 @@ public class SqlMake {
     static String sqlMake;
     //todo:关于Id的分配可能会涉及到高并发的问题,此时必须要进行考虑,后续会对这个问题进行更新(同一个Id给了两个用户)
     //todo:这个userIdCnt,songlistCnt可能需要通过数据库来存储,因为每次运行程序的时候都会重置这个userIdCnt,这里会引入一些问题
-    static int userIdCnt=100;//这里决定userId应该分配到哪一个
-    static int songlistCnt=30;
+    static int userIdCnt=140;//这里决定userId应该分配到哪一个
+    static int songlistCnt=40;
     // 将xml请求转换为sql语句
     public static void convertToSql(String type,String xml){
         System.out.println("进入convertToSql");

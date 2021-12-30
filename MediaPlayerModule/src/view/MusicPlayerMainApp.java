@@ -3,15 +3,11 @@ package view;
 import java.io.File;
 import java.util.List;
 
-import Utils.XStreamUtil;
-import XmlClassType.ReplySonglists;
-import XmlClassType.SelectSongsInSonglist;
 import cn.itheima.media.AddGroup;
 import cn.itheima.utils.XMLUtils;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -29,8 +25,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import media.MusicInMusicListLabel;
-import media.MusicLabel;
+import media.Register;
+import media.login;
 
 public class MusicPlayerMainApp extends Application {
 	//1.全局的"舞台"对象
@@ -45,8 +41,8 @@ public class MusicPlayerMainApp extends Application {
 	private double mouseX;
 	private double mouseY;
 
-	private static MainPane mainPane;
-	private static TopPane topPane;
+	private MainPane mainPane;
+	private TopPane topPane;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -56,6 +52,7 @@ public class MusicPlayerMainApp extends Application {
 		// 1.创建一个BorderPane对象
 		mainPane = new MainPane();
 		topEvent();
+		Login();
 		musicListEvent();
 		// 2.创建一个场景
 		Scene scene = new Scene(mainPane, 1250, 800);// 场景宽度：1300像素；场景高度：800像素
@@ -67,6 +64,8 @@ public class MusicPlayerMainApp extends Application {
 		primaryStage.show();
 
 	}
+
+
 	//上侧面板事件
 	private void topEvent() {
 		// 右侧的最小化按钮
@@ -136,6 +135,25 @@ public class MusicPlayerMainApp extends Application {
 		});
 	}
 
+	//登录注册
+	private void Login() {
+		// 1.用户头像：Label
+		mainPane.getLeftPane().getLabUserImage().setOnMouseClicked(e -> {
+			// 创建一个新的舞台
+			new login(staticStage,mainPane.getLeftPane().getLabUserID(), this);
+		});
+		// 登录按钮：Label
+		mainPane.getLeftPane().getLabLogin().setOnMouseClicked(e -> {
+			// 创建一个新的舞台
+			new login(staticStage,mainPane.getLeftPane().getLabUserID(), this);
+		});
+
+		// 退出按钮：Label
+		mainPane.getLeftPane().getLabQuit().setOnMouseClicked(e -> {
+			new Register(staticStage, this);
+		});
+	}
+
 	//歌单列表事件
 	private void musicListEvent() {
 		// 歌单+符号：ImageView
@@ -143,14 +161,15 @@ public class MusicPlayerMainApp extends Application {
 			// 创建一个新的舞台
 			new AddMusicGroup(staticStage, mainPane.getMusicPane().getGroupVBox(), this);
 		});
-//		// 专辑+符号：ImageView
-//		mainPane.getMusicPane().getLab_createalbum().setOnMouseClicked(e -> {
-//			// 创建一个新的舞台
-//			new AddMusicGroup(staticStage, mainPane.getMusicPane().getAlbumVBox(), this);
-//		});
+
 		mainPane.getMusicPane().setStaticStage(staticStage);
+
 	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+
+
 }
