@@ -530,7 +530,9 @@ public class MusicPane {
 		vBox.setPadding(new Insets(5, 5, 5, 10));
 		vBox.getChildren().addAll(hBox);
 
-		List<String> groupList = XMLUtils.readAllGroup();
+		List<String> groupList = XMLUtils.readAllGroup();//**************************
+
+
 		// 将每个"歌单名字"封装为一个"HBox"对象
 		List<HBox> hBoxList = new ArrayList<>();
 		for (String groupName : groupList) {
@@ -603,7 +605,7 @@ public class MusicPane {
 				List<File> files = fileChooser.showOpenMultipleDialog(staticStage);
 				if (files != null && files.size() > 0) {
 					// 将集合中的每个文件的路径写入到xml文件中
-					XMLUtils.insertSounds(labGroupName.getLabel().getText().trim(), files);
+					XMLUtils.insertSounds(labGroupName.getLabel().getText().trim(), files);//********************
 				}
 
 			});
@@ -641,7 +643,7 @@ public class MusicPane {
 				Optional<ButtonType> buttonType = alert.showAndWait();
 				if (buttonType.get() == ButtonType.OK) {
 					// 调用XMLUtils进行删除
-					XMLUtils.deleteGroup(labGroupName.getLabel().getText().trim());
+					XMLUtils.deleteGroup(labGroupName.getLabel().getText().trim());//********************************
 
 					// 从VBox中删除
 					this.groupVBox.getChildren().remove(hBox1);
@@ -1921,7 +1923,6 @@ public class MusicPane {
 		for (int j = 0; j < songSize; j++) {
 			mypanesong.getChildren().add(group[j]);
 		}
-
 	}
 
 	/**
