@@ -97,46 +97,46 @@ public class MusicPane {
 	private double xOffset;
 	private double yOffset;
 	//7.歌单名称标签
-	private Label labGroupName;
+	private static Label labGroupName;
 	private Label lab_mymusic, lab_name, lab_follow, lab_fans;
 	//8.播放列表的TableView
-	private TableView<PlayBean> tableView;
+	private static TableView<PlayBean> tableView;
 	//9.当前播放歌曲的索引
-	private int currentIndex;
+	private static int currentIndex;
 	//10.当前播放的时间的前一秒--设置滚动条
-	private int prevSecond;
+	private static int prevSecond;
 	//11.当前播放的PlayBean
-	private PlayBean currentPlayBean;
+	private static PlayBean currentPlayBean;
 	//12.下侧面板的：总时间
-	private Label labTotalTime;
+	private static Label labTotalTime;
 	//13.碟片的ImageView对象
-	private ImageView panImageView;
+	private static ImageView panImageView;
 	//14.旋转的时间轴对象
-	private Timeline timeline;
+	private static Timeline timeline;
 	//15.背景
-	private ImageView backImageView;
+	private static ImageView backImageView;
 	//16.播放按钮的ImageView对象
-	private ImageView butPlayImage;
+	private static ImageView butPlayImage;
 	//17.播放按钮的Label
-	private Label labPlay;
+	private static Label labPlay;
 	//18.当前播放模式：
-	private int playMode = 1;//1 : 列表循环；2. 顺序播放  3.单曲循环
+	private static int playMode = 1;//1 : 列表循环；2. 顺序播放  3.单曲循环
 	//19.播放时间滚动条对象
-	private Slider sliderSong;
+	private static Slider sliderSong;
 	//20.已播放时间的Lable
-	private Label labPlayTime;
+	private static Label labPlayTime;
 	//21.音量滚动条
 	private Slider sldVolume;
 	//22.音量的进度条
-	private ProgressBar volumeProgress;
+	private static ProgressBar volumeProgress;
 	//23.记录静音前的音量
 	private double prevVolumn;
 	//24.显示歌词的VBox容器
-	private VBox lrcVBox;
+	private static VBox lrcVBox;
 	//25.存储歌词时间的ArrayList
-	private ArrayList<BigDecimal> lrcList = new ArrayList<>();
+	private static ArrayList<BigDecimal> lrcList = new ArrayList<>();
 	//26.当前歌词的索引
-	private int currentLrcIndex;
+	private static int currentLrcIndex;
 
 	//个人信息
 	private Label lab_creategroup, lab_playg, lab_addg, lab_delg, lab_createalbum;
@@ -563,7 +563,6 @@ public class MusicPane {
 			labGroupName.getLabel().setOnMouseEntered(e -> labGroupName.getLabel().setTextFill(Color.WHITE));
 			labGroupName.getLabel().setOnMouseExited(e -> labGroupName.getLabel().setTextFill(Color.rgb(210, 210, 210)));
 
-
 			// 3.播放图片：ImageView
 			ImageView iv2 = new ImageView("img/left/volumn_1_Dark.png");
 			iv2.setFitWidth(15);
@@ -578,7 +577,7 @@ public class MusicPane {
 			lab_playg.setOnMouseClicked(e -> {
 				// 设置"歌单名称"
 				this.labGroupName.setText(labGroupName.getLabel().getText().trim());
-				readAllSoundByGroup();
+				//readAllSoundByGroup();
 
 			});
 
@@ -761,20 +760,20 @@ public class MusicPane {
 	}
 
 	// 播放
-	private void play() {
+	private static void play() {
 		// 读取歌词
 		loadLrc();
 		// 1.设置总时间
-		this.labTotalTime.setText(this.currentPlayBean.getTime());
+		labTotalTime.setText(currentPlayBean.getTime());
 
 		// 设置滚动条的总的值
-		this.sliderSong.setMax(this.currentPlayBean.getTotalSeconds());
-		this.sliderSong.setMajorTickUnit(1);// 每次前进1格
-		this.sliderSong.setValue(0);
+		sliderSong.setMax(currentPlayBean.getTotalSeconds());
+		sliderSong.setMajorTickUnit(1);// 每次前进1格
+		sliderSong.setValue(0);
 		prevSecond = 0;
 
 		// 设置初始音量
-		this.currentPlayBean.getMediaPlayer().setVolume(this.volumeProgress.getProgress());
+		currentPlayBean.getMediaPlayer().setVolume(volumeProgress.getProgress());
 		// 2.开始播放
 		new Thread() {
 			@Override
@@ -784,17 +783,17 @@ public class MusicPane {
 		}.start();
 
 		// 3.设置碟片
-		if (this.currentPlayBean.getImage() != null) {
-			this.panImageView.setImage(this.currentPlayBean.getImage());
+		if (currentPlayBean.getImage() != null) {
+			panImageView.setImage(currentPlayBean.getImage());
 		} else {
-			this.panImageView.setImage(new Image("img/center/pan_default.jpg"));
+			panImageView.setImage(new Image("img/center/pan_default.jpg"));
 		}
 		// 4.设置旋转
-		this.timeline.stop();
-		this.timeline.play();
+		timeline.stop();
+		timeline.play();
 
 		// 5.设置背景
-		WritableImage wImage = this.currentPlayBean.getImage();
+		WritableImage wImage = currentPlayBean.getImage();
 		if (wImage != null) {
 			// 虚化
 			WritableImage newWritableImage = new WritableImage((int) wImage.getWidth(), (int) wImage.getHeight());
@@ -812,7 +811,7 @@ public class MusicPane {
 
 				}
 			}
-			this.backImageView.setImage(newWritableImage);
+			backImageView.setImage(newWritableImage);
 		} else {
 			Image img = new Image("img/center/pan_default.jpg");
 			PixelReader pr = img.getPixelReader();
@@ -829,28 +828,28 @@ public class MusicPane {
 					pw.setColor(i, j, color);
 				}
 			}
-			this.backImageView.setImage(writableImage);
+			backImageView.setImage(writableImage);
 		}
 		// 设置播放按钮变为：暂停
-		this.butPlayImage.setImage(new Image("img/topandbottom/PauseDark.png"));
-		this.labPlay.setOnMouseEntered(e -> butPlayImage.setImage(new Image("img/topandbottom/Pause.png")));
-		this.labPlay.setOnMouseExited(e -> butPlayImage.setImage(new Image("img/topandbottom/PauseDark.png")));
+		butPlayImage.setImage(new Image("img/topandbottom/PauseDark.png"));
+		labPlay.setOnMouseEntered(e -> butPlayImage.setImage(new Image("img/topandbottom/Pause.png")));
+		labPlay.setOnMouseExited(e -> butPlayImage.setImage(new Image("img/topandbottom/PauseDark.png")));
 	}
 
 	// 加载正在播放的歌曲的lrc文件(歌词文件)
-	private void loadLrc() {
-		if (this.currentPlayBean == null) {
+	private static void loadLrc() {
+		if (currentPlayBean == null) {
 			return;
 		}
 
 		// 初始化lrcVBox
-		this.lrcVBox.getChildren().clear();
-		this.lrcVBox.setLayoutY(300);
-		this.lrcList.clear();
-		this.currentLrcIndex = 0;
+		lrcVBox.getChildren().clear();
+		lrcVBox.setLayoutY(300);
+		lrcList.clear();
+		currentLrcIndex = 0;
 
 		// 读取MP3文件
-		File mp3File = new File(this.currentPlayBean.getFilePath());
+		File mp3File = new File(currentPlayBean.getFilePath());
 		// 查找歌词文件
 		File lrcFile = new File(mp3File.getParent(),
 				mp3File.getName().substring(0, mp3File.getName().indexOf(".")) + ".lrc");
@@ -878,7 +877,7 @@ public class MusicPane {
 				// 换算为总的毫秒
 				BigDecimal totalMilli = new BigDecimal(intMinute * 60).add(new BigDecimal(strSecond))
 						.multiply(new BigDecimal("1000"));
-				this.lrcList.add(totalMilli);
+				lrcList.add(totalMilli);
 
 				// 创建歌词：Label
 				Label lab = new Label(row.trim().substring(row.indexOf("]") + 1));
@@ -892,21 +891,21 @@ public class MusicPane {
 				lab.setAlignment(Pos.CENTER);
 
 				// 判断是否是第一个歌词，如果是，改为30号，黄色
-				if (this.lrcVBox.getChildren().size() == 0) {
+				if (lrcVBox.getChildren().size() == 0) {
 					lab.setTextFill(Color.YELLOW);
 					lab.setFont(new Font("黑体", 30));
 				}
 				// 判断是否是第二行
-				if (this.lrcVBox.getChildren().size() == 1) {
+				if (lrcVBox.getChildren().size() == 1) {
 					lab.setTextFill(Color.WHITE);
 				}
 				// 将歌词Label添加到lrcVBox中
-				this.lrcVBox.getChildren().add(lab);
+				lrcVBox.getChildren().add(lab);
 			}
 
 			// 最后添加一行"JAVA MUSIC PLAYER"
-			if (this.currentPlayBean.getMediaPlayer().getTotalDuration().toMillis()
-					- this.lrcList.get(this.lrcList.size() - 1).doubleValue() > 0) {
+			if (currentPlayBean.getMediaPlayer().getTotalDuration().toMillis()
+					- lrcList.get(lrcList.size() - 1).doubleValue() > 0) {
 				Label lab = new Label("JAVA MUSIC PLAYER");
 				lab.setMinWidth(550);
 				lab.setMinHeight(35);
@@ -917,8 +916,8 @@ public class MusicPane {
 				lab.setTextFill(Color.rgb(255, 0, 0));
 				lab.setFont(new Font("黑体", 26));
 				lab.setAlignment(Pos.CENTER);
-				this.lrcVBox.getChildren().add(lab);
-				this.lrcList.add(new BigDecimal(this.currentPlayBean.getMediaPlayer().getTotalDuration().toMillis()));
+				lrcVBox.getChildren().add(lab);
+				lrcList.add(new BigDecimal(currentPlayBean.getMediaPlayer().getTotalDuration().toMillis()));
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -1256,22 +1255,23 @@ public class MusicPane {
 		bottomPane.setRight(hBox);
 		return bottomPane;
 	}
-
+//************************
 	// 读取某个歌单的所有歌曲
-	public void readAllSoundByGroup() {
+	public static PlayBean readAllSoundByGroup(SongsWithNames songsmini,int i) {
 		System.out.println("hello world");
 
 		// 1.读取此歌单下，所有的歌曲：
-		List<SoundBean> soundList = XMLUtils.findSoundByGroupName(this.labGroupName.getText().trim());
+	//	List<SoundBean> soundList = XMLUtils.findSoundByGroupName(labGroupName.getText().trim());
 		// 2.解析每个歌曲文件，封装PlayBean
-		List<PlayBean> playBeanList = new ArrayList<>();
-		for (int i = 0; i < soundList.size(); i++) {
-			SoundBean soundBean = soundList.get(i);
+
+		//for (int i = 0; i < soundList.size(); i++) {
+			//SoundBean soundBean = songs;
 			PlayBean playBean = new PlayBean();
 			playBean.setId(i + 1);
 
 			// 读取音频文件
-			File file = new File(soundBean.getFilePath());
+			//File file = new File(soundBean.getFilePath());
+			File file = new File(songsmini.getAsong().getSongmus_addr());
 			// 解析文件
 			MP3File mp3File = null;
 			try {
@@ -1321,14 +1321,19 @@ public class MusicPane {
 			}
 
 			// 为PlayBean赋值
-			playBean.setSoundName(songName);
-			playBean.setArtist(artist);
-			playBean.setAlbum(album);
-			playBean.setFilePath(soundBean.getFilePath());
+			playBean.setSoundName(songsmini.getSongName());
+			playBean.setArtist(songsmini.getSingerName());
+			playBean.setAlbum(songsmini.getAlbumName());
+			playBean.setFilePath(songsmini.getAsong().getSongmus_addr());
+
 
 			URI uri = file.toURI();
+			System.out.println(uri.toString());
+		System.out.println("before uri");
 			Media media = new Media(uri.toString());
+		System.out.println("after uri");
 			MediaPlayer mp = new MediaPlayer(media);
+		//Media media = new Media(new File("file:///home/winged/IdeaProjects/MoviePlayer/video/barsandtone.flv").toURI().toString());
 
 			// 监听播放器播放时的事件
 			mp.currentTimeProperty().addListener(new ChangeListener<Duration>() {
@@ -1504,38 +1509,37 @@ public class MusicPane {
 			// 监听播放完毕时
 			mp.setOnEndOfMedia(() -> {
 				// 1.停止当前播放器的播放
-				this.currentPlayBean.getMediaPlayer().stop();
-				// 2.停止光盘的转动
-				this.timeline.stop();
+				currentPlayBean.getMediaPlayer().stop();
+				// 2.停止光盘的转动this.timeline.stop();
 				// 设置歌词的位置
-				this.lrcVBox.getChildren().clear();
-				this.lrcVBox.setLayoutY(50 * 2 - 10);
-				this.lrcList.clear();
-				this.currentLrcIndex = 0;
+				lrcVBox.getChildren().clear();
+				lrcVBox.setLayoutY(50 * 2 - 10);
+				lrcList.clear();
+				currentLrcIndex = 0;
 
 				// 根据当前的播放模式选择下一首歌
-				switch (this.playMode) {
+				switch (playMode) {
 					case 1:// 循环播放
-						this.currentIndex++;
-						if (this.currentIndex >= this.tableView.getItems().size()) {
+						currentIndex++;
+						if (currentIndex >= tableView.getItems().size()) {
 							currentIndex = 0;
 						}
-						this.currentPlayBean = tableView.getItems().get(this.currentIndex);
+						currentPlayBean = tableView.getItems().get(currentIndex);
 
 						break;
 					case 2:// 列表顺序播放
-						this.currentIndex++;
-						if (currentIndex >= this.tableView.getItems().size()) {
+						currentIndex++;
+						if (currentIndex >= tableView.getItems().size()) {
 							return;
 						}
-						this.currentPlayBean = tableView.getItems().get(this.currentIndex);
+						currentPlayBean = tableView.getItems().get(currentIndex);
 
 						break;
 					case 3:// 单曲循环
-						this.currentPlayBean.getMediaPlayer().seek(new Duration(0));
+						currentPlayBean.getMediaPlayer().seek(new Duration(0));
 						break;
 				}
-				this.tableView.getSelectionModel().select(currentIndex);
+				tableView.getSelectionModel().select(currentIndex);
 				play();
 			});
 			playBean.setMediaPlayer(mp);
@@ -1573,17 +1577,14 @@ public class MusicPane {
 				playBean.setImage(writableImage);
 			}
 
-			// 将PlayBean封装到集合中
-			playBeanList.add(playBean);
-		}
+			return playBean;
 
-		// 将PlayBeanList中的数据显示到表格中
-		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
-		this.tableView.getItems().clear();// 清空表格
-		this.tableView.setItems(data);
-	}
+		}
+//	}
 
 	/* ----------------------get&set----------------------- */
+
+
 	public Label getLab_name() {
 		return lab_name;
 	}
@@ -1803,6 +1804,9 @@ public class MusicPane {
 	 * @author Zhang Yingying，Zhang Haohan
 	 */
 	public static void generateSongsInSonglist(SelectSongsInSonglist songs) {
+
+		List<PlayBean> playBeanList = new ArrayList<>();
+
 		mypanesong.getChildren().clear();
 		//创建一个场景
 		System.out.println("enter generateSongsInSongList");
@@ -1813,6 +1817,11 @@ public class MusicPane {
 		int locateY = 20;
 
 		for (int i = 0; i < songSize; i++) {
+
+			PlayBean playBean=readAllSoundByGroup(songs.getSongs().get(i),i );
+
+			System.out.println("after readallsoundbygroup..");
+
 			String songName = songs.getSongs().get(i).getSongName();
 			int songId = songs.getSongs().get(i).getAsong().getSong_id();
 			String singerName = songs.getSongs().get(i).getSingerName();
@@ -1837,8 +1846,22 @@ public class MusicPane {
 			lab_playg.setMinHeight(0);
 			lab_playg.setOnMouseEntered(e -> iv2.setImage(new Image("img/left/volumn_1.png")));
 			lab_playg.setOnMouseExited(e -> iv2.setImage(new Image("img/left/volumn_1_Dark.png")));
+			int finalI = i;
 			lab_playg.setOnMouseClicked(e -> {
-				//readAllSoundByGroup();
+
+				// 将PlayBean封装到集合中
+				playBeanList.add(playBean);
+				currentIndex = finalI;
+				//2.将前一秒置为：0
+				prevSecond = 0;
+				//3.判断当前是否正在播放，如果是：将其停止
+				if (currentPlayBean != null) {
+					currentPlayBean.getMediaPlayer().stop();
+				}
+				//4.获取当前的PlayBean
+				currentPlayBean = playBean;
+				//5.播放
+				play();
 				//readAllSound();
 			});
 			lab_playg.setPrefWidth(100);
@@ -1891,6 +1914,10 @@ public class MusicPane {
 			//mypanesong.getChildren().add(group[i]);
 //88888888888888888888888888888888888
 		}
+		//		// 将PlayBeanList中的数据显示到表格中
+		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
+		tableView.getItems().clear();// 清空表格
+		tableView.setItems(data);
 		for (int j = 0; j < songSize; j++) {
 			mypanesong.getChildren().add(group[j]);
 		}
@@ -2083,331 +2110,3 @@ public class MusicPane {
 		mypanesong.getChildren().addAll(group);
 	}
 }
-/*	public static void readAllSound()
-	{
-		System.out.println("hello world");
-
-		// 1.读取此歌单下，所有的歌曲：
-		List<SoundBean> soundList = XMLUtils.findSoundByGroupName(this.labGroupName.getText().trim());
-		// 2.解析每个歌曲文件，封装PlayBean
-		List<PlayBean> playBeanList = new ArrayList<>();
-		for (int i = 0; i < soundList.size(); i++) {
-			SoundBean soundBean = soundList.get(i);
-			PlayBean playBean = new PlayBean();
-			playBean.setId(i + 1);
-
-			// 读取音频文件
-			File file = new File(soundBean.getFilePath());
-			// 解析文件
-			MP3File mp3File = null;
-			try {
-				mp3File = new MP3File(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (TagException e) {
-				e.printStackTrace();
-			} catch (ReadOnlyFileException e) {
-				e.printStackTrace();
-			} catch (CannotReadException e) {
-				e.printStackTrace();
-			} catch (InvalidAudioFrameException e) {
-				e.printStackTrace();
-			}
-			// 获取MP3文件的头信息
-			MP3AudioHeader audioHeader = (MP3AudioHeader) mp3File.getAudioHeader();
-			// 获取字符串形式的时长：
-			String strLength = audioHeader.getTrackLengthAsString();
-			// 转换为int类型的时长
-			int intLength = audioHeader.getTrackLength();
-
-			Set<String> keySet = mp3File.getID3v2Tag().frameMap.keySet();
-			String songName = null;// 歌名
-			String artist = null;// 演唱者
-			String album = null;// 专辑名称
-
-			if (keySet.contains("TIT2")) {
-				songName = mp3File.getID3v2Tag().frameMap.get("TIT2").toString();
-			}
-			if (keySet.contains("TPE1")) {
-				artist = mp3File.getID3v2Tag().frameMap.get("TPE1").toString();
-			}
-			if (keySet.contains("TALB")) {
-				album = mp3File.getID3v2Tag().frameMap.get("TALB").toString();
-			}
-			System.out.println("歌名：" + songName + " 演唱者：" + artist + " 专辑名称：" + album);
-			if (songName != null && !songName.equals("null")) {
-				songName = songName.substring(songName.indexOf("\"") + 1, songName.lastIndexOf("\""));
-			}
-			if (artist != null && !artist.equals("null")) {
-				artist = artist.substring(artist.indexOf("\"") + 1, artist.lastIndexOf("\""));
-
-			}
-			if (album != null && !album.equals("null")) {
-				album = album.substring(album.indexOf("\"") + 1, album.lastIndexOf("\""));
-			}
-
-			// 为PlayBean赋值
-			playBean.setSoundName(songName);
-			playBean.setArtist(artist);
-			playBean.setAlbum(album);
-			playBean.setFilePath(soundBean.getFilePath());
-
-			URI uri = file.toURI();
-			Media media = new Media(uri.toString());
-			MediaPlayer mp = new MediaPlayer(media);
-
-			// 监听播放器播放时的事件
-			mp.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-				@Override
-				public void changed(ObservableValue<? extends Duration> observable, Duration oldValue,
-									Duration newValue) {
-					// 此方法用于在媒体播放器播放时自动调用，每隔100毫秒调用一次
-
-					// 1.由于是每秒使滚动条前进一次，获newValue中的"秒"
-					int currentSecond = (int) newValue.toSeconds();
-
-					// 2.设置滚动条，一秒一次
-					if (currentSecond == prevSecond + 1) {
-						// 设置滚动条
-						sliderSong.setValue(sliderSong.getValue() + 1);
-						// 设置前一秒
-						prevSecond++;
-						// 设置新的播放时间
-						Date date = new Date();
-						date.setTime((int) sliderSong.getValue() * 1000);
-						labPlayTime.setText(new SimpleDateFormat("mm:ss").format(date));
-
-					}
-
-					// 设置歌词
-					// 1.获取当前的播放时间
-					double millis = newValue.toMillis();
-
-					// 2.判断此次是否在正常的播放区间
-					double min = 0;
-					double max = 0;
-					if (currentLrcIndex == 0) {
-						min = 0;
-					} else {
-						min = lrcList.get(currentLrcIndex).doubleValue();
-					}
-					if (currentLrcIndex != lrcList.size() - 1) {
-						max = lrcList.get(currentLrcIndex + 1).doubleValue();
-					} else {
-						max = lrcList.get(currentLrcIndex).doubleValue();
-					}
-					// 判断是否在正常的区间
-					if (millis >= min && millis < max) {
-						return;
-					}
-
-					if (currentLrcIndex < lrcList.size() - 1
-							&& millis >= lrcList.get(currentLrcIndex + 1).doubleValue()) {
-						currentLrcIndex++;// 当前歌词索引的指示器
-						// 上移
-						// 时间轴动画
-						Timeline t1 = new Timeline(new KeyFrame(Duration.millis(15), // 每隔15毫秒执行一次
-								new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {// 每次执行时，会执行此方法
-										lrcVBox.setLayoutY(lrcVBox.getLayoutY() - 1);
-									}
-								}));
-						t1.setCycleCount(50);// 执行50次
-						t1.play();
-
-						// 当前歌词变黄，字号：30
-						Label lab_current = (Label) lrcVBox.getChildren().get(currentLrcIndex);
-						lab_current.setTextFill(Color.YELLOW);
-						// 字号：30(动画)
-						Timeline t2 = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
-							int startSize = 18;
-
-							@Override
-							public void handle(ActionEvent event) {
-								lab_current.setFont(new Font("黑体", startSize++));
-							}
-						}));
-						t2.setCycleCount(12);
-						t2.play();
-
-						// 前一行变小，变为：浅灰色
-						Label lab_Pre_1 = (Label) lrcVBox.getChildren().get(currentLrcIndex - 1);
-						if (lab_Pre_1 != null) {
-
-							Timeline t3 = new Timeline(
-									new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
-										int startSize = 30;
-
-										@Override
-										public void handle(ActionEvent event) {
-											lab_Pre_1.setFont(new Font("黑体", startSize--));
-										}
-									}));
-							t3.setCycleCount(12);
-							t3.play();
-							t3.setOnFinished(e -> lab_Pre_1.setTextFill(Color.rgb(114, 114, 114)));
-
-						}
-
-						// 前二行
-						if (currentLrcIndex - 2 >= 0) {
-							Label lab_Pre_2 = (Label) lrcVBox.getChildren().get(currentLrcIndex - 2);
-							lab_Pre_2.setTextFill(Color.rgb(53, 53, 53));
-						}
-
-						// 当前行的后一行，白色
-						if (currentLrcIndex + 1 < lrcList.size()) {
-							Label lab_next_1 = (Label) lrcVBox.getChildren().get(currentLrcIndex + 1);
-							lab_next_1.setTextFill(Color.WHITE);
-						}
-					} else if (currentLrcIndex > 0 && millis < lrcList.get(currentLrcIndex).doubleValue()) {
-						// 拖动播放条，回退了
-						currentLrcIndex--;
-						// 歌词VBox的下移
-						Timeline t1 = new Timeline(new KeyFrame(Duration.millis(15), // 每隔15毫秒执行一次
-								new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent event) {// 每次执行时，会执行此方法
-										lrcVBox.setLayoutY(lrcVBox.getLayoutY() + 1);
-									}
-								}));
-						t1.setCycleCount(50);// 执行50次
-						t1.play();
-
-						// 当前歌词变黄，字号：30
-						Label lab_current = (Label) lrcVBox.getChildren().get(currentLrcIndex);
-						lab_current.setTextFill(Color.YELLOW);
-
-						// 字号：30(动画)
-						Timeline t2 = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
-							int startSize = 18;
-
-							@Override
-							public void handle(ActionEvent event) {
-								lab_current.setFont(new Font("黑体", startSize++));
-							}
-						}));
-						t2.setCycleCount(12);
-						t2.play();
-
-						// 前一行变为：浅灰
-						if (currentLrcIndex - 1 >= 0) {
-							Label lab = (Label) lrcVBox.getChildren().get(currentLrcIndex - 1);
-							lab.setTextFill(Color.rgb(114, 114, 114));
-						}
-						// 后一行变为百色：字号：18
-						if (currentLrcIndex + 1 < lrcVBox.getChildren().size()) {
-							Label lab = (Label) lrcVBox.getChildren().get(currentLrcIndex + 1);
-							lab.setTextFill(Color.WHITE);
-							// 动画
-							Timeline t3 = new Timeline(
-									new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
-										int startSize = 30;
-
-										@Override
-										public void handle(ActionEvent event) {
-											lab.setFont(new Font("黑体", startSize--));
-										}
-									}));
-							t3.setCycleCount(12);
-							t3.play();
-						}
-						// 后二行，变为浅灰
-						if (currentLrcIndex + 2 < lrcVBox.getChildren().size()) {
-							Label lab = (Label) lrcVBox.getChildren().get(currentLrcIndex + 2);
-							lab.setTextFill(Color.rgb(114, 114, 114));
-						}
-						// 后三行，变为深灰
-						if (currentLrcIndex + 3 < lrcVBox.getChildren().size()) {
-							Label lab = (Label) lrcVBox.getChildren().get(currentLrcIndex + 3);
-							lab.setTextFill(Color.rgb(53, 53, 53));
-						}
-					}
-
-				}
-			});
-			// 监听播放完毕时
-			mp.setOnEndOfMedia(() -> {
-				// 1.停止当前播放器的播放
-				this.currentPlayBean.getMediaPlayer().stop();
-				// 2.停止光盘的转动
-				this.timeline.stop();
-				// 设置歌词的位置
-				this.lrcVBox.getChildren().clear();
-				this.lrcVBox.setLayoutY(50 * 2 - 10);
-				this.lrcList.clear();
-				this.currentLrcIndex = 0;
-
-				// 根据当前的播放模式选择下一首歌
-				switch (this.playMode) {
-					case 1:// 循环播放
-						this.currentIndex++;
-						if (this.currentIndex >= this.tableView.getItems().size()) {
-							currentIndex = 0;
-						}
-						this.currentPlayBean = tableView.getItems().get(this.currentIndex);
-
-						break;
-					case 2:// 列表顺序播放
-						this.currentIndex++;
-						if (currentIndex >= this.tableView.getItems().size()) {
-							return;
-						}
-						this.currentPlayBean = tableView.getItems().get(this.currentIndex);
-
-						break;
-					case 3:// 单曲循环
-						this.currentPlayBean.getMediaPlayer().seek(new Duration(0));
-						break;
-				}
-				this.tableView.getSelectionModel().select(currentIndex);
-				play();
-			});
-			playBean.setMediaPlayer(mp);
-
-			// 计算文件大小
-			BigDecimal bigDecimal = new BigDecimal(file.length());// 文件大小，单位：字节
-			BigDecimal result = bigDecimal.divide(new BigDecimal(1024 * 1024), 2, RoundingMode.HALF_UP);
-			playBean.setLength(result.toString() + " M");// 字符串的文件大小
-
-			playBean.setTime(strLength);// 字符串时间
-			playBean.setTotalSeconds(intLength);// 总秒数
-
-			// 设置删除图片
-			ImageView iv = new ImageView("img/left/laji_2_Dark.png");
-			iv.setFitWidth(15);
-			iv.setFitHeight(15);
-
-			Label labDelete = new Label("", iv);
-			labDelete.setOnMouseEntered(e -> iv.setImage(new Image("img/left/laji_2.png")));
-			labDelete.setOnMouseExited(e -> iv.setImage(new Image("img/left/laji_2_Dark.png")));
-
-			labDelete.setAlignment(Pos.CENTER);
-			playBean.setLabDelete(labDelete);
-
-			// 设置图像
-			AbstractID3v2Tag tag = mp3File.getID3v2Tag();
-			AbstractID3v2Frame frame = (AbstractID3v2Frame) tag.getFrame("APIC");
-			if (frame != null) {
-				FrameBodyAPIC body = (FrameBodyAPIC) frame.getBody();
-				byte[] imageData = body.getImageData();
-				// 将字节数组转换为Image对象
-				java.awt.Image image = Toolkit.getDefaultToolkit().createImage(imageData, 0, imageData.length);
-				BufferedImage bufferedImage = ImageUtils.toBufferedImage(image);
-				WritableImage writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
-				playBean.setImage(writableImage);
-			}
-
-			// 将PlayBean封装到集合中
-			playBeanList.add(playBean);
-		}
-
-		// 将PlayBeanList中的数据显示到表格中
-		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
-		this.tableView.getItems().clear();// 清空表格
-		this.tableView.setItems(data);
-
-	}
-}
-*/

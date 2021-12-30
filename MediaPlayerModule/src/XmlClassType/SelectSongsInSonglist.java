@@ -33,7 +33,7 @@ public class SelectSongsInSonglist implements Serializable {
     public SelectSongsInSonglist(String requestEnum,String sl_id,List<SongsWithNames> songs){
         this.requestEnum=requestEnum;
         if(sl_id!=null)
-        this.sl_id=Integer.parseInt(sl_id);
+            this.sl_id=Integer.parseInt(sl_id);
         this.songs=songs;
     }
 //    public SelectSongsInSonglist(String requestEnum,String sl_id,String albumId,String singerId,String singerName,String albumName){
