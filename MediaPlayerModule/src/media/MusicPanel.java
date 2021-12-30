@@ -200,7 +200,6 @@ public class MusicPanel {
         }
 
     }
-
     public String[] getCollectInfo() {
         return collectInfo;
     }
@@ -219,5 +218,4 @@ public class MusicPanel {
     /**
      * 收集get到的信息
      */
-
 }

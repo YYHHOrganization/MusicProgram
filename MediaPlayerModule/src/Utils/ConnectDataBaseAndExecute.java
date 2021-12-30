@@ -12,7 +12,7 @@ import java.sql.*;
 public class ConnectDataBaseAndExecute {
     String driver="oracle.jdbc.driver.OracleDriver";
     String url="jdbc:oracle:thin:@localhost:1521:xe";
-    String user="user2";
+    String user="musicboss";
     String password="123456";
     static Connection conn;
 
