@@ -84,7 +84,7 @@ public class MusicPane {
 
 	//1.全局的"舞台"对象
 	public static Stage staticStage;
-
+	private static int songSize;
 	//2.最大化之前的x,y坐标
 	private double resetX;
 	private double resetY;
@@ -968,6 +968,7 @@ public class MusicPane {
 			this.timeline.stop();
 			// 让当前的索引-1
 			this.currentIndex--;
+			System.out.println("currentindex="+currentIndex);
 			if (currentIndex < 0) {
 				if (this.playMode == 1) {// 列表循环
 					this.currentIndex = this.tableView.getItems().size() - 1;// 定位到最后一首歌
@@ -1025,6 +1026,8 @@ public class MusicPane {
 			this.timeline.stop();
 			//让当前的索引+1
 			this.currentIndex++;
+			System.out.println("currentindex="+currentIndex);
+			System.out.println("tableviewsize="+this.tableView.getItems().size());
 			if (currentIndex >= this.tableView.getItems().size()) {
 				if (this.playMode == 1) {//列表循环
 					this.currentIndex = 0;//定位到第一首歌
@@ -1560,6 +1563,7 @@ public class MusicPane {
 						currentPlayBean.getMediaPlayer().seek(new Duration(0));
 						break;
 				}
+				System.out.println("currentindex="+currentIndex);
 				tableView.getSelectionModel().select(currentIndex);
 				play();
 			});
@@ -1837,12 +1841,11 @@ public class MusicPane {
 		mypanesong.getChildren().clear();
 		//创建一个场景
 		System.out.println("enter generateSongsInSongList");
-		int songSize = songs.getSongs().size();
+		songSize = songs.getSongs().size();
 		System.out.println("songsize=" + songSize);
 		Group[] group = new Group[songSize + 1];
 		int locateX = 100;
 		int locateY = 20;
-
 		for (int i = 0; i < songSize; i++) {
 
 			PlayBean playBean=readAllSoundByGroup(songs.getSongs().get(i),i );
@@ -1874,10 +1877,9 @@ public class MusicPane {
 			lab_playg.setOnMouseEntered(e -> iv2.setImage(new Image("img/left/volumn_1.png")));
 			lab_playg.setOnMouseExited(e -> iv2.setImage(new Image("img/left/volumn_1_Dark.png")));
 			int finalI = i;
+			// 将PlayBean封装到集合中
+			playBeanList.add(playBean);
 			lab_playg.setOnMouseClicked(e -> {
-
-				// 将PlayBean封装到集合中
-				playBeanList.add(playBean);
 				currentIndex = finalI;
 				//2.将前一秒置为：0
 				prevSecond = 0;
@@ -1943,10 +1945,14 @@ public class MusicPane {
 		}
 		//		// 将PlayBeanList中的数据显示到表格中
 		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
+		System.out.println("playbeanlistsize="+playBeanList.size());
 		tableView.getItems().clear();// 清空表格
 		tableView.setItems(data);
+		System.out.println("tableviewinitsize="+tableView.getItems().size());
 		for (int j = 0; j < songSize; j++) {
 			mypanesong.getChildren().add(group[j]);
+			// todo tableview的容量有问题,并没有扩充容量,导致歌曲播放没有按照顺序
+
 		}
 	}
 

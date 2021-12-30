@@ -26,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import media.Message;
 import media.Register;
 import media.login;
 
@@ -142,7 +143,8 @@ public class MusicPlayerMainApp extends Application {
 		// 1.用户头像：Label
 		mainPane.getLeftPane().getLabUserImage().setOnMouseClicked(e -> {
 			// 创建一个新的舞台
-			new login(staticStage,mainPane.getLeftPane().getLabUserID(), this);
+			//new login(staticStage,mainPane.getLeftPane().getLabUserID(), this);
+			new Message(staticStage,this);
 		});
 		// 登录按钮：Label
 		mainPane.getLeftPane().getLabLogin().setOnMouseClicked(e -> {
