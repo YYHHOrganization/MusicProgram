@@ -582,7 +582,13 @@ public class MusicPane {
 
 		List<String> groupList = XMLUtils.readAllGroup();//**************************
 
-
+		int[] songnum=new int[5];
+		songnum[0]=50002;
+		songnum[1]=50003;
+		songnum[2]=50004;
+		songnum[3]=50005;
+		songnum[4]=50006;
+		int index=0;
 		// 将每个"歌单名字"封装为一个"HBox"对象
 		List<HBox> hBoxList = new ArrayList<>();
 		for (String groupName : groupList) {
@@ -607,7 +613,9 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
+
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002+index);
+			index++;
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);
@@ -1871,7 +1879,43 @@ public class MusicPane {
 		System.out.println("songsize=" + songSize);
 		Group[] group = new Group[songSize + 1];
 		int locateX = 100;
-		int locateY = 20;
+		int locateY = 60;
+		Label label1=new Label("歌曲名");
+		label1.setTextFill(Color.GRAY);
+		label1.setPrefWidth(100);
+		label1.setPrefHeight(10);
+		label1.setLayoutX(locateX);
+		label1.setLayoutY(locateY-10);
+
+		Label label2=new Label("歌曲作者");
+		label2.setTextFill(Color.GRAY);
+		label2.setPrefWidth(100);
+		label2.setPrefHeight(10);
+		label2.setLayoutX(locateX+100);
+		label2.setLayoutY(locateY-10);
+
+		Label label3=new Label("专辑");
+		label3.setTextFill(Color.GRAY);
+		label3.setPrefWidth(100);
+		label3.setPrefHeight(10);
+		label3.setLayoutX(locateX+200);
+		label3.setLayoutY(locateY-10);
+
+		Label label4=new Label("歌曲时长");
+		label4.setTextFill(Color.GRAY);
+		label4.setPrefWidth(100);
+		label4.setPrefHeight(10);
+		label4.setLayoutX(locateX+300);
+		label4.setLayoutY(locateY-10);
+
+		Label label5=new Label("播放歌曲");
+		label5.setTextFill(Color.GRAY);
+		label5.setPrefWidth(100);
+		label5.setPrefHeight(10);
+		label5.setLayoutX(locateX+400);
+		label5.setLayoutY(locateY-10);
+
+		locateY+=25;
 		for (int i = 0; i < songSize; i++) {
 
 			PlayBean playBean=readAllSoundByGroup(songs.getSongs().get(i),i );
@@ -1972,6 +2016,7 @@ public class MusicPane {
 		//		// 将PlayBeanList中的数据显示到表格中
 		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
 		tableView.getItems().clear();// 清空表格
+		mypanesong.getChildren().addAll(label1,label2,label3,label4,label5);
 		tableView.setItems(data);
 		for (int j = 0; j < songSize; j++) {
 			mypanesong.getChildren().add(group[j]);
@@ -2047,6 +2092,9 @@ public class MusicPane {
 
 		// 将每个"歌单名字"封装为一个"HBox"对象
 		List<HBox> hBoxList = new ArrayList<>();
+
+		//int index
+
 		for (ReplySonglistInfo  songinfo: groupList) {
 			String groupName = songinfo.getName();
 			// 1.心形图标：ImageView
@@ -2070,7 +2118,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002); //后面改成70001
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);

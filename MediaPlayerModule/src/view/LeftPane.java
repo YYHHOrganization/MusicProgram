@@ -21,12 +21,14 @@ public class LeftPane extends ScrollPane {
 	private StackPane leftStackPane;
 	private VBox leftVBox;
 	private LeftFunList leftFunList;
-	private Label labTitleUser, labUserImage, labUserID, labLogin, labQuit, labTitleFun;
+	private Label labTitleUser, labUserImage, labUserID, labQuit, labTitleFun;
+	public  Label labLogin;
 	// 用户头像的ImageView对象
 	private ImageView userImage;
 	// 背景
 	private ImageView backImageView;
 	//个人信息面板
+
 	public LeftPane() {
 		leftStackPane = new StackPane();
 		leftVBox = new VBox();
