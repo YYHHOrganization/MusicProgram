@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <groupList> 
-  <group name="古典歌单" createDate="2021-12-30 00:09:01">
+  <group name="古典歌单" createDate="2021-12-30 00:09:01"> 
     <sound> 
       <filePath>C:\Users\Administrator\Music\刘德华-爱你一万年.mp3</filePath>  
       <addDate>2019-02-10 00:09:09</addDate> 
@@ -21,9 +21,17 @@
     <sound> 
       <filePath>C:\Users\Administrator\Music\刘德华-谢谢你的爱.mp3</filePath>  
       <addDate>2019-02-10 00:09:09</addDate> 
-    </sound> 
+    </sound>  
+    <sound> 
+      <filePath>E:\大三上\JAVA\大作业12280835\MediaPlayerPro\music\Dynamite.mp3</filePath>  
+      <addDate>2021-12-31 13:57:03</addDate> 
+    </sound>  
+    <sound>
+      <filePath>E:\大三上\JAVA\大作业12280835\MediaPlayerPro\music\Dynamite.mp3</filePath>
+      <addDate>2021-12-31 14:11:56</addDate>
+    </sound>
   </group>  
-  <group name="流行歌单" createDate="2021-12-30 00:09:01">
+  <group name="流行歌单" createDate="2021-12-30 00:09:01"> 
     <sound> 
       <filePath>C:\Users\Administrator\Music\刘德华-爱你一万年.mp3</filePath>  
       <addDate>2019-02-10 00:09:09</addDate> 
@@ -61,7 +69,7 @@
       <addDate>2019-02-11 02:03:55</addDate> 
     </sound> 
   </group>  
-  <group name="经典歌单" addDate="2021-12-23 19:25:40">
+  <group name="经典歌单" addDate="2021-12-23 19:25:40"> 
     <sound> 
       <filePath>C:\Users\Administrator\Music\怪可爱的 .mp3</filePath>  
       <addDate>2021-12-23 21:41:26</addDate> 
@@ -71,7 +79,7 @@
       <addDate>2021-12-27 00:03:33</addDate> 
     </sound> 
   </group>  
-  <group name="其他歌单" addDate="2021-12-23 21:55:17"></group>
-  <group name="测试歌单" addDate="2021-12-27 18:41:34"></group>
-  <group name="展示歌单" addDate="2021-12-27 22:15:13"></group>
+  <group name="其他歌单" addDate="2021-12-23 21:55:17"></group>  
+  <group name="测试歌单" addDate="2021-12-27 18:41:34"></group>  
+  <group name="展示歌单" addDate="2021-12-27 22:15:13"></group> 
 </groupList>
