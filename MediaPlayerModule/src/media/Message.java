@@ -1,6 +1,7 @@
 package media;
 
 
+import Utils.EventHandling;
 import cn.itheima.utils.XMLUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -217,7 +218,18 @@ public class Message {
         butOk.setBackground(new Background(new BackgroundFill(Color.rgb(15, 140, 170), null, null)));
         butOk.setOnMouseClicked(e -> {
             // 1.获取文件筐的数据
-            String txtUser = txtUserName.getText().trim();
+            String txt_id=txtID.getText().trim();
+            String txt_username = txtUserName.getText().trim();
+            String txt_sex=txtSex.getText().trim();
+            String txt_birthday=txtBirthday.getText().trim();
+            String txt_address=txtAdress.getText().trim();
+            String txt_vip="1";
+            String txt_singer="0";
+            String txt_description=TextUserDescription.getText();//没去空格
+
+            String txt_img=null;
+            String[] userRInfo=new String[]{txt_id,txt_username,txt_sex,txt_birthday,txt_address,txt_vip,txt_description,txt_img,txt_singer};
+            EventHandling.giveOutMsg("UPDATE_USERINFO",userRInfo);
 
 //			// 写入MusicGroup.xml中
 //			XMLUtils.addGroup(txtUser);
@@ -227,6 +239,7 @@ public class Message {
 //			hBox1.setPadding(new Insets(5, 5, 5, 10));
 //			this.groupVBox.getChildren().add(hBox1);
 
+     //       EventHandling.giveOutMsg("");
             // 关闭此舞台
             this.stage.hide();
         });

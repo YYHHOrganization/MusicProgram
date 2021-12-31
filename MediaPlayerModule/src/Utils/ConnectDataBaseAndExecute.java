@@ -12,7 +12,7 @@ import java.sql.*;
 public class ConnectDataBaseAndExecute {
     String driver="oracle.jdbc.driver.OracleDriver";
     String url="jdbc:oracle:thin:@localhost:1521:xe";
-    String user="user2";
+    String user="musicboss";
     String password="123456";
     static Connection conn;
 
@@ -80,6 +80,7 @@ public class ConnectDataBaseAndExecute {
                     case "INSERT_USERINFO":
                     case "INSERT_USERSONGLIST":
                     case "INSERT_SONGLIST":
+                    case "UPDATE_USERINFO":
                         statement1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
                         statement1.executeUpdate(sqlQuery);
                         break;

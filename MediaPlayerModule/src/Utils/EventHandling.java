@@ -72,6 +72,14 @@ public class EventHandling {
                 String xmlStream3= XStreamUtil.objectToXml(userinfo);
                 ClientSocketUtils.sendToServerXml(xmlStream3);
                 break;
+            case "UPDATE_USERINFO":
+                String[] collectinfo4=msg;
+                UserInfo userInfo2=new UserInfo("UPDATE_USERINFO",collectinfo4[0],collectinfo4[1],collectinfo4[2],
+                        collectinfo4[3],collectinfo4[4],collectinfo4[5],collectinfo4[6],collectinfo4[7],collectinfo4[8]
+                        );
+                String xmlStream4= XStreamUtil.objectToXml(userInfo2);
+                ClientSocketUtils.sendToServerXml(xmlStream4);
+                break;
 
         }
     }

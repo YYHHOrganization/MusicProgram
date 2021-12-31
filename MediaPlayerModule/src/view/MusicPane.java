@@ -191,7 +191,7 @@ public class MusicPane {
 		test1.setOnMouseClicked(e->{
 			System.out.println("enter  getCenterPane");
 
-			ClickOneUserOrSongOrSinger showMySongList=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_SONGLISTS,10001);
+			ClickOneUserOrSongOrSinger showMySongList=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_SONGLISTS,71);
 			String newXmlStream=XStreamUtil.objectToXml(showMySongList);
 			ClientSocketUtils.sendToServerXml(newXmlStream);
 		});
@@ -241,6 +241,13 @@ public class MusicPane {
 		backImageView1.setEffect(gaussianBlur);
 
 		// 3.TOP10
+		MusicLabel labGroupName111 = new MusicLabel("TOP10", "SONGLIST", 70001); //后面改成70001
+		labGroupName111.getLabel().setPrefHeight(200);
+		labGroupName111.getLabel().setPrefWidth(500);
+		labGroupName111.getLabel().setLayoutX(70);
+		labGroupName111.getLabel().setLayoutY(80);
+
+
 		TOP10ImageView = new ImageView("img/TOP10.png");
 		TOP10ImageView.setFitWidth(160);
 		TOP10ImageView.setFitHeight(160);
@@ -253,7 +260,8 @@ public class MusicPane {
 			/*
 			todo:在这里写查询top10的逻辑
 			 */
-			EventHandling.giveOutSingleRequest("SHOW_TOP_10");
+			//EventHandling.giveOutSingleRequest("SHOW_TOP_10");
+
 		});
 
 		// 4.推荐歌单
@@ -269,7 +277,7 @@ public class MusicPane {
 			todo:在这里写显示推荐歌单的逻辑
 			 */
 		//	EventHandling.giveOutSingleRequest("SHOW_GOOD_SONGLISTS");
-			ClickOneUserOrSongOrSinger showMySongList=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_SONGLISTS,10001);
+			ClickOneUserOrSongOrSinger showMySongList=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_SONGLISTS,71);
 			String newXmlStream=XStreamUtil.objectToXml(showMySongList);
 			ClientSocketUtils.sendToServerXml(newXmlStream);
 
@@ -297,7 +305,7 @@ public class MusicPane {
 		AnchorPane anchorPane1 = new AnchorPane();
 		anchorPane1.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 		anchorPane1.getChildren().addAll(backImageView1, labMusicHall, labelRecommendSongList, labelRecommendAlbum,
-				labelTOP10ImageView/* ,curmusicGroup */);
+				labelTOP10ImageView/* ,curmusicGroup */,labGroupName111.getLabel());
 
 		// 上侧的ScrollPane
 		ScrollPane scrollPane = new ScrollPane();
@@ -621,7 +629,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002+index);
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 70000+index);
 			index++;
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
@@ -958,7 +966,7 @@ public class MusicPane {
 
 				// 判断是否是第一个歌词，如果是，改为30号，黄色
 				if (lrcVBox.getChildren().size() == 0) {
-					lab.setTextFill(Color.YELLOW);
+					lab.setTextFill(Color.LIGHTBLUE);
 					lab.setFont(new Font("黑体", 30));
 				}
 				// 判断是否是第二行
@@ -1353,6 +1361,7 @@ public class MusicPane {
 			} catch (InvalidAudioFrameException e) {
 				e.printStackTrace();
 			}
+
 			// 获取MP3文件的头信息
 			MP3AudioHeader audioHeader = (MP3AudioHeader) mp3File.getAudioHeader();
 			// 获取字符串形式的时长：
@@ -1463,7 +1472,7 @@ public class MusicPane {
 
 						// 当前歌词变黄，字号：30
 						Label lab_current = (Label) lrcVBox.getChildren().get(currentLrcIndex);
-						lab_current.setTextFill(Color.YELLOW);
+						lab_current.setTextFill(Color.LIGHTBLUE);
 						// 字号：30(动画)
 						Timeline t2 = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
 							int startSize = 18;
@@ -1522,7 +1531,7 @@ public class MusicPane {
 
 						// 当前歌词变黄，字号：30
 						Label lab_current = (Label) lrcVBox.getChildren().get(currentLrcIndex);
-						lab_current.setTextFill(Color.YELLOW);
+						lab_current.setTextFill(Color.LIGHTBLUE);
 
 						// 字号：30(动画)
 						Timeline t2 = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
@@ -1579,7 +1588,9 @@ public class MusicPane {
 				// 2.停止光盘的转动this.timeline.stop();
 				// 设置歌词的位置
 				lrcVBox.getChildren().clear();
-				lrcVBox.setLayoutY(50 * 2 - 10);
+			//	lrcVBox.setLayoutY(50 * 2 - 10);
+				lrcVBox.setLayoutY(300);
+
 				lrcList.clear();
 				currentLrcIndex = 0;
 
@@ -2173,7 +2184,13 @@ public class MusicPane {
 						break;
 					case "CLICK_A_SONGLIST":
 						SelectSongsInSonglist songs = (SelectSongsInSonglist) XStreamUtil.converXmlStrToObject(SelectSongsInSonglist.class, xml);
-						generateSongsInSonglist(songs);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								//更新JavaFX的主线程的代码放在此处
+								generateSongsInSonglist(songs);
+							}
+						});
 						break;
 					case "REGIST_A_USER":
 					case "LOGIN_A_USER":
@@ -2209,7 +2226,8 @@ public class MusicPane {
 		//创建一个场景
 		System.out.println("enter generateSongsInSongList");
 		songSize = songs.getSongs().size();
-		System.out.println("songsize=" + songSize);
+		//System.out.println("songSize="+songSize);
+		//System.out.println("songsize=" + songSize);
 		Group[] group = new Group[songSize + 1];
 		int locateX = 100;
 		int locateY = 60;
@@ -2293,7 +2311,8 @@ public class MusicPane {
 				//4.获取当前的PlayBean
 				currentPlayBean = playBean;
 				//5.播放
-				play();
+					play();
+
 				//readAllSound();
 			});
 			lab_playg.setPrefWidth(100);
@@ -2451,7 +2470,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002); //后面改成70001
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 70002); //后面改成70001
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);

@@ -14,7 +14,7 @@ public class SqlMake {
     static String sqlMake;
     //todo:关于Id的分配可能会涉及到高并发的问题,此时必须要进行考虑,后续会对这个问题进行更新(同一个Id给了两个用户)
     //todo:这个userIdCnt,songlistCnt可能需要通过数据库来存储,因为每次运行程序的时候都会重置这个userIdCnt,这里会引入一些问题
-    static int userIdCnt=145;//这里决定userId应该分配到哪一个
+    static int userIdCnt=150;//这里决定userId应该分配到哪一个
     static int songlistCnt=40;
     // 将xml请求转换为sql语句
     public static void convertToSql(String type,String xml){
@@ -145,12 +145,27 @@ public class SqlMake {
                 }
                 break;
             case "SHOW_TOP_10"://视图里存放比较好的歌曲id和歌曲名
-                SingleQuest singleQuest=(SingleQuest)XStreamUtil.converXmlStrToObject(SingleQuest.class,xml);
-                sqlMake="SELECT * FROM view_top_songs WHERE ROWNUM<=10 ORDER BY ROWNUM ASC";
-                ConnectDataBaseAndExecute databaseconn13=new ConnectDataBaseAndExecute();
-                if(databaseconn13.connectDatabase()){
-                    databaseconn13.executeSqlQuery("SHOW_TOP_10",sqlMake);
-                    databaseconn13.closeDatabase();
+//                SingleQuest singleQuest=(SingleQuest)XStreamUtil.converXmlStrToObject(SingleQuest.class,xml);
+//                //sqlMake="SELECT * FROM view_top_songs WHERE ROWNUM<=10 ORDER BY ROWNUM ASC";
+//
+//                ConnectDataBaseAndExecute databaseconn13=new ConnectDataBaseAndExecute();
+//                if(databaseconn13.connectDatabase()){
+//                    databaseconn13.executeSqlQuery("SHOW_TOP_10",sqlMake);
+//                    databaseconn13.closeDatabase();
+//                }
+                ClickOneUserOrSongOrSinger user30=(ClickOneUserOrSongOrSinger)XStreamUtil.converXmlStrToObject(ClickOneUserOrSongOrSinger.class,xml);
+                String sql20="SELECT song_list.sl_id,singer.singer_name,album.album_name,songs.*\n" +
+                        "FROM song_list,singer,songs,songlist_storage,album\n" +
+                        "WHERE singer.user_id=songs.singer_id\n" +
+                        "AND songs.song_id=songlist_storage.song_id\n" +
+                        "AND song_list.sl_id=songlist_storage.sl_id\n" +
+                        "AND album.album_id=songs.album_id\n" +
+                        "AND song_list.sl_id>=70000 AND song_list.sl_id<80000";
+                System.out.println(sql20);
+                ConnectDataBaseAndExecute databaseconn20=new ConnectDataBaseAndExecute();
+                if(databaseconn20.connectDatabase()){
+                    databaseconn20.executeSqlQuery(type,sql20);
+                    databaseconn20.closeDatabase();
                 }
                 break;
             case "SHOW_GOOD_ALBUM": //视图里存放比较好的专辑id和专辑名
@@ -162,6 +177,44 @@ public class SqlMake {
                     databaseconn15.closeDatabase();
                 }
                 break;
+            case "UPDATE_USERINFO":
+                UserInfo userInfo=(UserInfo)XStreamUtil.converXmlStrToObject(UserInfo.class,xml);
+//                sqlMake="INSERT INTO USER_INFO VALUES(\n"+
+//                        userInfo.getUser_id()+","+userInfo.getUser_name()+","+userInfo.getSex()
+//                        +","+userInfo.getBirthdate()+","+userInfo.getAddress()+","+userInfo.getIs_vip()
+//                        +","+userInfo.getUser_description()+","+userInfo.getUser_image()
+//                        +","+userInfo.getIs_singer()
+//                        +");";
+
+//                sqlMake="UPDATE USER_INFO\n" +
+//                        "SET user_name=" +userInfo.getUser_name()+
+//                        ",sex=" +userInfo.getSex() +
+//                        ",BIRTHDATE=to_date(" +userInfo.getBirthdate()+
+//                        ",'yyyy-MM-dd HH24:mi:ss'),ADDRESS=" +userInfo.getAddress()+
+//                        ",IS_VIP=" +userInfo.getIs_vip()+
+//                        ",USER_DESCRIPTION=" +userInfo.getUser_description()+
+//                        ",USER_IMAGE=" +userInfo.getUser_image()+
+//                        ",IS_SINGER=" +userInfo.getIs_singer()+
+//                        "WHERE USER_ID="+36;
+
+                sqlMake="UPDATE USER_INFO\n" +
+                        "SET user_name='" +userInfo.getUser_name()+
+                        "',sex=" +userInfo.getSex() +
+                        ",BIRTHDATE=null" +
+                        ",ADDRESS='" +userInfo.getAddress()+
+                        "',IS_VIP=1"+
+                        ",USER_DESCRIPTION='" +userInfo.getUser_description()+
+                        "',USER_IMAGE='" +userInfo.getUser_image()+
+                        "',IS_SINGER=0" +
+                        "WHERE USER_ID="+36;
+                System.out.println();
+                ConnectDataBaseAndExecute databaseconn16=new ConnectDataBaseAndExecute();
+                if(databaseconn16.connectDatabase()){
+                    databaseconn16.executeSqlQuery("UPDATE_USERINFO",sqlMake);
+                    databaseconn16.closeDatabase();
+                }
+                break;
+
        }
     }
 }
