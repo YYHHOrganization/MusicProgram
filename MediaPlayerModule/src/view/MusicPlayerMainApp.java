@@ -2,14 +2,18 @@ package view;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 import XmlClassType.UserInfo;
 import cn.itheima.media.AddGroup;
 import cn.itheima.utils.XMLUtils;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -29,6 +33,10 @@ import javafx.stage.StageStyle;
 import media.Message;
 import media.Register;
 import media.login;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 public class MusicPlayerMainApp extends Application {
 	//1.全局的"舞台"对象
@@ -46,6 +54,7 @@ public class MusicPlayerMainApp extends Application {
 	private MainPane mainPane;
 	private TopPane topPane;
 	public static UserInfo myuserinfo;
+	public boolean isLoggedIn=false;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -65,6 +74,7 @@ public class MusicPlayerMainApp extends Application {
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 		// 显示舞台
 		primaryStage.show();
+
 
 	}
 
@@ -144,7 +154,26 @@ public class MusicPlayerMainApp extends Application {
 		mainPane.getLeftPane().getLabUserImage().setOnMouseClicked(e -> {
 			// 创建一个新的舞台
 			//new login(staticStage,mainPane.getLeftPane().getLabUserID(), this);
-			new Message(staticStage,this);
+			if(myuserinfo!=null&&myuserinfo.getUser_id()>0){ // 如果登录数据是合法的
+				System.out.println("isloggedin");
+				new Message(staticStage,this);
+			}
+			else{
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+							alert.setTitle("尚未登录");
+							alert.setHeaderText("请登录或注册以修改个人信息");
+							Optional<ButtonType> buttonType = alert.showAndWait();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
+			}
 		});
 		// 登录按钮：Label
 		mainPane.getLeftPane().getLabLogin().setOnMouseClicked(e -> {

@@ -10,7 +10,6 @@ import java.net.Socket;
  * Socket客户端<br>
  * 功能说明：
  *
- * @author 大智若愚的小懂
  * @Date 2016年8月30日
  * @version 1.0
  * @author Zhang Yingying，Zhang Haohan

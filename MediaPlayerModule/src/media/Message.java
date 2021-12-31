@@ -78,7 +78,7 @@ public class Message {
         txtID.setPrefHeight(15);
         txtID.setLayoutX(160);
         txtID.setLayoutY(70);
-        txtID.setText("ID");
+        txtID.setText(String.valueOf(MusicPlayerMainApp.myuserinfo.getUser_id()));
         txtID.setEditable(false);// 不可修改
 
         Label labUserName = new Label();
@@ -180,7 +180,7 @@ public class Message {
         TextSinger.setPrefHeight(15);
         TextSinger.setLayoutX(160);
         TextSinger.setLayoutY(315);
-        TextSinger.setText("Singer");
+        TextSinger.setText("非歌手");
         TextSinger.setEditable(false);// 不可修改
 
         Label labUserDescription = new Label();

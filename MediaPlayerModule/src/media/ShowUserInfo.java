@@ -218,6 +218,8 @@ public class ShowUserInfo {
                 } else {
                     musicLabel=new MusicLabel("您的登录状态为:成功,欢迎听歌","NO_HCI",-10);
                     //MainAppTest1ForClickOne.userId=user1.getRequestId();
+                    //todo:登录之后就没有登录和注册按键了
+
                 }
                 musicLabel.init();
                 break;

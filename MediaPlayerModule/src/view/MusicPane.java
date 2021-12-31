@@ -1,6 +1,7 @@
 package view;
 
 import TestThings.MainAppTest1ForClickOne;
+import Utils.ClientSocketUtils;
 import Utils.EventHandling;
 import Utils.XStreamUtil;
 import XmlClassType.*;
@@ -95,10 +96,10 @@ public class MusicPane {
 	private static double mouseX;
 	private static double mouseY;
 	//5.显示歌单列表的VBox对象
-	private VBox groupVBox;
+	private static VBox groupVBox;
 	private VBox groupVBox1;
 	//标签
-	private Label labList;
+	private static Label labList;
 	//6.改变窗体前，X,Y坐标
 	private double xOffset;
 	private double yOffset;
@@ -145,7 +146,11 @@ public class MusicPane {
 	private static int currentLrcIndex;
 
 	//个人信息
-	private Label lab_creategroup, lab_playg, lab_addg, lab_delg, lab_createalbum;
+	private static Label lab_creategroup;
+	private static Label lab_playg;
+	private static Label lab_addg;
+	private static Label lab_delg;
+	private Label lab_createalbum;
 	private Label lab_mygroup, lab_spe, lab_myalbum;
 
 	//音乐馆
@@ -159,12 +164,12 @@ public class MusicPane {
 	private Label labelRecommendAlbum;
 
 	private BorderPane lrc;
-	private BorderPane list;
+	private static BorderPane list;
 	private BorderPane play;
 	private ScrollPane user;
 	private ScrollPane musicHallPane;
 	private AnchorPane anchorPane1;
-	private BorderPane userAlist;
+	private static BorderPane userAlist;
 	private BorderPane musicHall;
 
 
@@ -178,10 +183,35 @@ public class MusicPane {
 		userAlist.setTop(musicHallPane);
 		userAlist.setCenter(list);
 
+		Label test1=new Label("显示我的歌单");
+		test1.setFont(new Font("黑体", 18));
+		test1.setPrefWidth(220);
+		test1.setPrefHeight(20);
+		test1.setTextFill(Color.rgb(160, 160, 160));
+		test1.setOnMouseClicked(e->{
+			System.out.println("enter  getCenterPane");
+
+			ClickOneUserOrSongOrSinger showMySongList=new ClickOneUserOrSongOrSinger(RequestEnum.SHOW_MY_SONGLISTS,10001);
+			String newXmlStream=XStreamUtil.objectToXml(showMySongList);
+			ClientSocketUtils.sendToServerXml(newXmlStream);
+		});
+		userAlist.setRight(test1);
 	}
 
 	/* 音乐馆上侧面板 */
 	public ScrollPane getMusicHallPane() {
+		Label test1=new Label("显示我的歌单");
+		test1.setFont(new Font("黑体", 18));
+		test1.setPrefWidth(220);
+		test1.setPrefHeight(20);
+		test1.setTextFill(Color.rgb(160, 160, 160));
+		test1.setOnMouseClicked(e->{
+			System.out.println("enter  getCenterPane");
+			ClickOneUserOrSongOrSinger clicksong=new ClickOneUserOrSongOrSinger(RequestEnum.CLICK_A_SONG,50002);
+			String xmlStream3=XStreamUtil.objectToXml(clicksong);
+			ClientSocketUtils.sendToServerXml(xmlStream3);
+		});
+
 		// 1.音乐馆：Label
 		labMusicHall = new Label("音乐馆");
 		labMusicHall.setFont(new Font("黑体", 30));
@@ -516,8 +546,9 @@ public class MusicPane {
 		return borderPane;
 	}
 
-	// 歌单板块
+	// 歌单板块*********************
 	public BorderPane getCenterPane() {
+
 		// 1.已创建歌单：Label
 		Label labGd = new Label("list");
 		labGd.setFont(new Font("黑体", 18));
@@ -576,7 +607,7 @@ public class MusicPane {
 //			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
 //			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
 
-			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 70001);
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
 			labGroupName.getLabel().setMinHeight(0);
 			labGroupName.getLabel().setPrefHeight(20);
 			labGroupName.getLabel().setPrefWidth(150);
@@ -626,7 +657,6 @@ public class MusicPane {
 					// 将集合中的每个文件的路径写入到xml文件中
 					XMLUtils.insertSounds(labGroupName.getLabel().getText().trim(), files);//********************
 				}
-
 			});
 
 			// 5.垃圾桶符号：Label
@@ -776,8 +806,8 @@ public class MusicPane {
 		borderPane.setTop(labLine);
 		//将"操作列"随着窗体的大小改变而改变,可以该做其他列
 		c7.prefWidthProperty().bind(borderPane.widthProperty());
-		return borderPane;
 
+		return borderPane;
 	}
 
 	// 播放
@@ -968,7 +998,6 @@ public class MusicPane {
 			this.timeline.stop();
 			// 让当前的索引-1
 			this.currentIndex--;
-			System.out.println("currentindex="+currentIndex);
 			if (currentIndex < 0) {
 				if (this.playMode == 1) {// 列表循环
 					this.currentIndex = this.tableView.getItems().size() - 1;// 定位到最后一首歌
@@ -1026,8 +1055,6 @@ public class MusicPane {
 			this.timeline.stop();
 			//让当前的索引+1
 			this.currentIndex++;
-			System.out.println("currentindex="+currentIndex);
-			System.out.println("tableviewsize="+this.tableView.getItems().size());
 			if (currentIndex >= this.tableView.getItems().size()) {
 				if (this.playMode == 1) {//列表循环
 					this.currentIndex = 0;//定位到第一首歌
@@ -1563,7 +1590,6 @@ public class MusicPane {
 						currentPlayBean.getMediaPlayer().seek(new Duration(0));
 						break;
 				}
-				System.out.println("currentindex="+currentIndex);
 				tableView.getSelectionModel().select(currentIndex);
 				play();
 			});
@@ -1945,14 +1971,10 @@ public class MusicPane {
 		}
 		//		// 将PlayBeanList中的数据显示到表格中
 		ObservableList<PlayBean> data = FXCollections.observableList(playBeanList);
-		System.out.println("playbeanlistsize="+playBeanList.size());
 		tableView.getItems().clear();// 清空表格
 		tableView.setItems(data);
-		System.out.println("tableviewinitsize="+tableView.getItems().size());
 		for (int j = 0; j < songSize; j++) {
 			mypanesong.getChildren().add(group[j]);
-			// todo tableview的容量有问题,并没有扩充容量,导致歌曲播放没有按照顺序
-
 		}
 	}
 
@@ -1962,25 +1984,292 @@ public class MusicPane {
 	 * @param replySonglists zyy zhh
 	 */
 	public static void generateSongLists(ReplySonglists replySonglists) {
-		mypanesong.getChildren().clear();
-		System.out.println("enter generateSongsInSongList");
-		Group group = new Group();
-		for (int i = 0; i < replySonglists.getReplysonglists().size(); i++) {
-			if (replySonglists.getReplysonglists().get(i).getIs_create() == 0) {
-				//todo:把这个放到收藏的歌单当中去
-			} else {
-				MusicLabel musicLabel = new MusicLabel(replySonglists.getReplysonglists().get(i).getName(), "SONGLIST",
-						replySonglists.getReplysonglists().get(i).getSl_id());
-				musicLabel.getLabel().setLayoutX(20);
-				musicLabel.getLabel().setLayoutY(30 + 30 * i);
-				musicLabel.getLabel().setPrefHeight(20);
-				musicLabel.getLabel().setPrefWidth(50);
-				musicLabel.init();
-				group.getChildren().add(musicLabel.getLabel());
+		BorderPane borderPane= getCenterPaneForUser(replySonglists);
+		userAlist.setCenter(borderPane);
+	//	*********************
+//		mypanesong.getChildren().clear();
+//		System.out.println("enter generateSongsInSongList");
+//		Group group = new Group();
+//		for (int i = 0; i < replySonglists.getReplysonglists().size(); i++) {
+//			if (replySonglists.getReplysonglists().get(i).getIs_create() == 0) {
+//				//todo:把这个放到收藏的歌单当中去
+//			} else {
+//				MusicLabel musicLabel = new MusicLabel(replySonglists.getReplysonglists().get(i).getName(), "SONGLIST",
+//						replySonglists.getReplysonglists().get(i).getSl_id());
+//				----------------------
+//				musicLabel.getLabel().setLayoutX(20);
+//				musicLabel.getLabel().setLayoutY(30 + 30 * i);
+//				musicLabel.getLabel().setPrefHeight(20);
+//				musicLabel.getLabel().setPrefWidth(50);
+//				musicLabel.init();
+//				group.getChildren().add(musicLabel.getLabel());
+//			}
+//
+//		}
+//		mypanesong.getChildren().addAll(group);
+	}
+	// 歌单板块*********************
+	public static BorderPane getCenterPaneForUser(ReplySonglists replySonglists) {
+		System.out.println("enter  getCenterPaneForUser");
+		// 1.已创建歌单：Label
+		Label labGd = new Label("list");
+		labGd.setFont(new Font("黑体", 18));
+		labGd.setPrefWidth(220);
+		labGd.setPrefHeight(20);
+		labGd.setTextFill(Color.rgb(160, 160, 160));
+		Bloom bloom = new Bloom();
+		bloom.setThreshold(0.5);
+		labGd.setEffect(bloom);
+
+		// 2.+符号：Label
+		ImageView v2 = new ImageView("img/left/create_2_Dark.png");
+		v2.setFitWidth(20);
+		v2.setPreserveRatio(true);
+		lab_creategroup = new Label("", v2);
+		lab_creategroup.setPrefWidth(20);
+		lab_creategroup.setPrefHeight(20);
+		lab_creategroup.setOnMouseEntered(e -> v2.setImage(new Image("img/left/create_2.png")));
+		lab_creategroup.setOnMouseExited(e -> v2.setImage(new Image("img/left/create_2_Dark.png")));
+
+		// 封装1和2的控件的HBox(水平布局)
+		HBox hBox = new HBox(5);
+		hBox.getChildren().addAll(labGd, lab_creategroup);
+
+		// 将HBox封装到一个VBox中
+		VBox vBox = new VBox(15);// 15表示元素之间的间距
+		vBox.setPrefWidth(255);
+		vBox.setPrefHeight(30);
+		vBox.setPadding(new Insets(5, 5, 5, 10));
+		vBox.getChildren().addAll(hBox);
+
+		//List<String> groupList = XMLUtils.readAllGroup();//**************************
+		List<ReplySonglistInfo > groupList=replySonglists.getReplysonglists();
+
+		// 将每个"歌单名字"封装为一个"HBox"对象
+		List<HBox> hBoxList = new ArrayList<>();
+		for (ReplySonglistInfo  songinfo: groupList) {
+			String groupName = songinfo.getName();
+			// 1.心形图标：ImageView
+			ImageView iv1 = new ImageView("img/left/xinyuanDark.png");
+			iv1.setFitWidth(15);
+			iv1.setPreserveRatio(true);
+			Label lab_heart = new Label("", iv1);
+			lab_heart.setMinWidth(0);
+			lab_heart.setMinHeight(0);
+			lab_heart.setPrefWidth(15);
+			lab_heart.setPrefHeight(15);
+			lab_heart.setOnMouseEntered(e -> iv1.setImage(new Image("img/left/xinyuan.png")));
+			lab_heart.setOnMouseExited(e -> iv1.setImage(new Image("img/left/xinyuanDark.png")));
+
+			// 2.歌单名称：Label
+//			Label labGroupName = new Label(groupName);
+//			labGroupName.setMinHeight(0);
+//			labGroupName.setPrefHeight(20);
+//			labGroupName.setPrefWidth(150);
+//			labGroupName.setTextFill(Color.rgb(210, 210, 210));
+//			labGroupName.setOnMouseEntered(e -> labGroupName.setTextFill(Color.WHITE));
+//			labGroupName.setOnMouseExited(e -> labGroupName.setTextFill(Color.rgb(210, 210, 210)));
+
+			MusicLabel labGroupName = new MusicLabel(groupName, "SONGLIST", 50002);
+			labGroupName.getLabel().setMinHeight(0);
+			labGroupName.getLabel().setPrefHeight(20);
+			labGroupName.getLabel().setPrefWidth(150);
+			labGroupName.getLabel().setTextFill(Color.rgb(210, 210, 210));
+			labGroupName.getLabel().setOnMouseEntered(e -> labGroupName.getLabel().setTextFill(Color.WHITE));
+			labGroupName.getLabel().setOnMouseExited(e -> labGroupName.getLabel().setTextFill(Color.rgb(210, 210, 210)));
+
+			 //3.播放图片：ImageView
+			ImageView iv2 = new ImageView("img/left/volumn_1_Dark.png");
+			iv2.setFitWidth(15);
+			iv2.setFitHeight(15);
+			lab_playg = new Label("", iv2);
+			lab_playg.setMinWidth(0);
+			lab_playg.setMinHeight(0);
+			lab_playg.setPrefWidth(15);
+			lab_playg.setPrefHeight(15);
+			lab_playg.setOnMouseEntered(e -> iv2.setImage(new Image("img/left/volumn_1.png")));
+			lab_playg.setOnMouseExited(e -> iv2.setImage(new Image("img/left/volumn_1_Dark.png")));
+			lab_playg.setOnMouseClicked(e -> {
+				// 设置"歌单名称"
+				//labGroupName.setText(labGroupName.getLabel().getText().trim());
+				//readAllSoundByGroup();
+			});
+
+			// 4.+符号：ImageView
+			ImageView iv3 = new ImageView("img/left/addDark.png");
+			iv3.setFitWidth(15);
+			iv3.setFitHeight(15);
+			lab_addg = new Label("", iv3);
+			lab_addg.setMinWidth(0);
+			lab_addg.setMinHeight(0);
+			lab_addg.setPrefWidth(15);
+			lab_addg.setPrefHeight(15);
+			lab_addg.setOnMouseEntered(e -> iv3.setImage(new Image("img/left/add.png")));
+			lab_addg.setOnMouseExited(e -> iv3.setImage(new Image("img/left/addDark.png")));
+			lab_addg.setOnMouseClicked(e -> {
+				// 显示"打开文件对话框"
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("打开音乐文件");
+				// 过滤文件
+				fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MP3", "*.mp3"),
+						new FileChooser.ExtensionFilter("flac", "*.flac"),
+						new FileChooser.ExtensionFilter("所有文件", "*.*"));
+				List<File> files = fileChooser.showOpenMultipleDialog(staticStage);
+				if (files != null && files.size() > 0) {
+					// 将集合中的每个文件的路径写入到xml文件中
+					XMLUtils.insertSounds(labGroupName.getLabel().getText().trim(), files);//********************
+				}
+			});
+
+			// 5.垃圾桶符号：Label
+			ImageView iv4 = new ImageView("img/left/laji_1_Dark.png");
+			iv4.setFitWidth(15);
+			iv4.setFitHeight(15);
+			lab_delg = new Label("", iv4);
+			lab_delg.setMinWidth(0);
+			lab_delg.setMinHeight(0);
+			lab_delg.setPrefWidth(15);
+			lab_delg.setPrefHeight(15);
+			lab_delg.setOnMouseEntered(e -> iv4.setImage(new Image("img/left/laji_1.png")));
+			lab_delg.setOnMouseExited(e -> iv4.setImage(new Image("img/left/laji_1_Dark.png")));
+			// 封装
+			HBox hBox1 = new HBox(10);
+			hBox1.getChildren().addAll(lab_heart, labGroupName.getLabel(), lab_playg, lab_addg, lab_delg);
+			hBox1.setPadding(new Insets(5, 5, 5, 10));
+
+			hBoxList.add(hBox1);
+			groupVBox = new VBox(15);
+			groupVBox.setPrefWidth(255);
+			groupVBox.setPrefHeight(1000);
+			groupVBox.setPadding(new Insets(10, 0, 0, 15));
+			for (HBox hb : hBoxList) {
+				groupVBox.getChildren().add(hb);
 			}
 
+			lab_delg.setOnMouseClicked(e -> {
+				// 1.弹出提示
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setTitle("确认删除");
+				alert.setHeaderText("你确定要删除歌单【" + labGroupName.getLabel().getText().trim() + "】吗？");
+				Optional<ButtonType> buttonType = alert.showAndWait();
+				if (buttonType.get() == ButtonType.OK) {
+					// 调用XMLUtils进行删除
+					XMLUtils.deleteGroup(labGroupName.getLabel().getText().trim());//********************************
+
+					// 从VBox中删除
+					groupVBox.getChildren().remove(hBox1);
+				}
+			});
 		}
-		mypanesong.getChildren().addAll(group);
+
+		//*******************************下侧：歌单列表******************************************//
+		tableView = new TableView<>();
+		tableView.setPrefWidth(960);
+		tableView.getStylesheets().add("css/playTable.css");
+
+		TableColumn c1 = new TableColumn("序号");
+		c1.setPrefWidth(80);
+		c1.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+		TableColumn c2 = new TableColumn("音乐标题");
+		c2.setPrefWidth(130);
+		c2.setCellValueFactory(new PropertyValueFactory<>("soundName"));
+
+		TableColumn c3 = new TableColumn("歌手");
+		c3.setPrefWidth(130);
+		c3.setCellValueFactory(new PropertyValueFactory<>("artist"));
+
+		TableColumn c4 = new TableColumn("专辑");
+		c4.setPrefWidth(130);
+		c4.setCellValueFactory(new PropertyValueFactory<>("album"));
+
+		TableColumn c5 = new TableColumn("大小");
+		c5.setPrefWidth(80);
+		c5.setCellValueFactory(new PropertyValueFactory<>("length"));
+
+		TableColumn c6 = new TableColumn("时间");
+		c6.setPrefWidth(80);
+		c6.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+		TableColumn c7 = new TableColumn("操作");
+		c7.setPrefWidth(80);
+		c7.setCellValueFactory(new PropertyValueFactory<>("labDelete"));
+
+
+		tableView.getColumns().addAll(c1, c2, c3, c4, c5, c6, c7);
+
+
+		tableView.setRowFactory(tv -> {
+			TableRow<PlayBean> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				//验证双击
+				if (event.getClickCount() == 2 && !row.isEmpty()) {
+					//1.获取选中行的索引
+					currentIndex = row.getIndex();
+					//2.将前一秒置为：0
+					prevSecond = 0;
+					//3.判断当前是否正在播放，如果是：将其停止
+					if (currentPlayBean != null) {
+						currentPlayBean.getMediaPlayer().stop();
+					}
+					//4.获取当前的PlayBean
+					currentPlayBean = row.getItem();
+					//5.播放
+					play();
+				}
+			});
+			return row;
+		});
+
+		//6.歌单列表标签
+		labList = new Label("我的歌单");
+		labList.setEffect(bloom);
+		labList.setFont(new Font("黑体", 18));
+		labList.setPrefWidth(90);
+		labList.setPrefHeight(30);
+		labList.setTextFill(Color.LIGHTGRAY);
+		labList.setAlignment(Pos.CENTER);
+		labList.setBackground(new Background(new BackgroundFill(Color.rgb(120, 8, 14), null, null)));
+		labList.setLayoutX(0);
+		labList.setLayoutY(-25);
+		//7.一条红线：Label
+		Label labLine = new Label();
+		labLine.setMinHeight(0);
+		labLine.setPrefHeight(2);
+		labLine.setBackground(new Background(new BackgroundFill(Color.rgb(120, 8, 14), null, null)));
+		labLine.setLayoutX(0);
+		labLine.setLayoutY(labList.getLayoutY() + labList.getPrefHeight());
+		BorderPane borderPane = new BorderPane();
+		AnchorPane anchorPane2 = new AnchorPane();
+
+		vBox.setLayoutX(0);
+		vBox.setLayoutY(0);
+
+		groupVBox.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+		ScrollPane gv = new ScrollPane();
+		gv.setPrefHeight(300);
+		gv.setPrefWidth(250);
+		gv.setContent(groupVBox);
+		gv.setPadding(new Insets(0, 0, 0, 0));
+		gv.setLayoutX(0);
+		gv.setLayoutY(50);
+		gv.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		gv.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+		VBox vboxList = new VBox();
+		vboxList.getChildren().addAll(labList, vBox, gv);
+
+		anchorPane2.getChildren().addAll(vboxList);
+		labLine.prefWidthProperty().bind(borderPane.widthProperty());
+		borderPane.setLeft(anchorPane2);
+		//borderPane.setCenter(tableView);//*************************
+		mypanesong = new Pane();
+		borderPane.setCenter(mypanesong);
+		borderPane.setTop(labLine);
+		//将"操作列"随着窗体的大小改变而改变,可以该做其他列
+		c7.prefWidthProperty().bind(borderPane.widthProperty());
+		return borderPane;
+
 	}
 	/**
 	 * @param user1 只有一个值得注意的字段的情况
@@ -2025,11 +2314,12 @@ public class MusicPane {
 							_alert.setHeaderText("您的登录状态为:");
 							if(user1.getRequestId()==0){
 								_alert.setContentText("失败,用户id或密码错误");
-								MainAppTest1ForClickOne.userId=-100;// 登录失败的时候重新将userID设置为原来的.
+								//MainAppTest1ForClickOne.userId=-100;// 登录失败的时候重新将userID设置为原来的.
 							} else {
 								_alert.setContentText("成功,欢迎使用Java音乐播放器");
 								login.labUserID.setText(String.valueOf(login.userinfo));
 								//MainAppTest1ForClickOne.userId=user1.getRequestId();
+
 							}
 							_alert.initOwner(staticStage);
 							_alert.show();
@@ -2181,4 +2471,6 @@ public class MusicPane {
 		});
 		mypanesong.getChildren().addAll(group);
 	}
+
+
 }

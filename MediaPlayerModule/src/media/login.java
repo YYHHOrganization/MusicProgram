@@ -34,17 +34,20 @@ public class login {
     private double mouseX;
     private double mouseY;
     public static String userinfo;
-
+    public static Label lab1;
     // 本窗体的舞台对象
     private Stage stage;
 
+    public static void noNeedToLogin(){
+        lab1.setText("");
+    }
     public login(Stage parentStage, Label labUserID, MusicPlayerMainApp musicPlayerMainApp) {
         this.parentStage = parentStage;
         this.labUserID = labUserID;
         this.musicPlayerMainApp = musicPlayerMainApp;
 
         // 1.登录：Label
-        Label lab1 = new Label("登录");
+        lab1 = new Label("登录");
         lab1.setTextFill(Color.WHITE);
         lab1.setFont(new Font("黑体", 18));
         lab1.setPrefWidth(160);
